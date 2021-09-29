@@ -19,10 +19,28 @@ session_start();
 // }
 
 //⑤データベースへ接続し、接続情報を変数に保存する
+$dbname = "zaiko2021_yse";
+$host = "localhost";
+$charset = "UTF8";
+$user =  "zaiko2021_yse";
+$password = "2021zaiko";
+$option = [PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION];
 
 //⑥データベースで使用する文字コードを「UTF8」にする
+$dsn = "mysql:dbname={$dbname};host={$host};charset={$charset}";
 
 //⑦書籍テーブルから書籍情報を取得するSQLを実行する。また実行結果を変数に保存する
+//データベースをPDOで接続してみる
+try
+{
+	$pdo = new PDO($dsn,$user,$password,$option);
+	// echo "SUCCESS";
+}catch(PDOException $e)
+{
+	die($e->getMessage());
+}
+//SQL
+
 ?>
 <!DOCTYPE html>
 <html lang="ja">
