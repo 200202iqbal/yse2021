@@ -40,6 +40,10 @@ try
 	die($e->getMessage());
 }
 //SQL
+$sql = "SELECT * FROM books LIMIT 1";
+
+//SQLを実行する
+$statement = $pdo->query($sql);
 
 ?>
 <!DOCTYPE html>
@@ -99,20 +103,20 @@ try
 					<tbody>
 						<?php
 						//⑩SQLの実行結果の変数から1レコードのデータを取り出す。レコードがない場合はループを終了する。
-						// while(/* ⑩の処理を書く */){
+						while($book= $statement->fetch(PDO::FETCH_ASSOC)){
 						// 	//⑪extract変数を使用し、1レコードのデータを渡す。
+							
+							echo "<tr id='book'>";
+							echo "<td id='check'><input type='checkbox' name='books[]'value=".$book["id"]."></td>";
+							echo "<td id='id'>".$book["id"]."</td>";
+							echo "<td id='title'>".$book["title"]."</td>";
+							echo "<td id='author'>".$book["author"]."</td>";
+							echo "<td id='date'>".$book["salesDate"]."</td>";
+							echo "<td id='price'>".$book["price"]."</td>";
+							echo "<td id='stock'>".$book["stock"]."</td>";
 
-						// 	echo "<tr id='book'>";
-						// 	echo "<td id='check'><input type='checkbox' name='books[]'value="./* ⑫IDを設定する */."></td>";
-						// 	echo "<td id='id'>/* ⑬IDを表示する */</td>";
-						// 	echo "<td id='title'>/* ⑭titleを表示する */</td>";
-						// 	echo "<td id='author'>/* ⑮authorを表示する */</td>";
-						// 	echo "<td id='date'>/* ⑯salesDateを表示する */</td>";
-						// 	echo "<td id='price'>/* ⑰priceを表示する */</td>";
-						// 	echo "<td id='stock'>/* ⑱stockを表示する */</td>";
-
-						// 	echo "</tr>";
-						// }
+							echo "</tr>";
+						}
 						?>
 					</tbody>
 				</table>
