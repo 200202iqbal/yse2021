@@ -46,14 +46,14 @@ function updateByid($id,$con,$total){
 	 * 引数で受け取った$totalの値で在庫数を上書く。
 	 * その際にWHERE句でメソッドの引数に$idに一致する書籍のみ取得する。
 	 */
-
-	$sql = "UPDATE items books 
-	title = :title,
-	price = :price,
-	stock = :stock
-	WHERE id = :id;";
-	$stmt = $pdo->prepare($sql);
-	return $stmt->execute($data);
+//example
+	// $sql = "UPDATE items books 
+	// title = :title,
+	// price = :price,
+	// stock = :stock
+	// WHERE id = :id;";
+	// $stmt = $pdo->prepare($sql);
+	// return $stmt->execute($data);
 }
 
 //⑤SESSIONの「login」フラグがfalseか判定する。「login」フラグがfalseの場合はif文の中に入る。
