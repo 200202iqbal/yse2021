@@ -13,13 +13,13 @@
 //①セッションを開始する
 session_start();
 // ②SESSIONの「login」フラグがfalseか判定する。「login」フラグがfalseの場合はif文の中に入る。
-if ($_SESSION["login"]){
-	//③SESSIONの「error2」に「ログインしてください」と設定する。
-	//④ログイン画面へ遷移する。
-}
-else{
-	header("Location: login.php");
-}
+// if ($_SESSION["login"]){
+// 	//③SESSIONの「error2」に「ログインしてください」と設定する。
+// 	//④ログイン画面へ遷移する。
+// }
+// else{
+// 	header("Location: login.php");
+// }
 
 //⑤データベースへ接続し、接続情報を変数に保存する
 $dbname = "zaiko2021_yse";
