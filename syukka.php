@@ -1,3 +1,4 @@
+<!-- roni file -->
 <?php
 /* 
 【機能】
@@ -24,9 +25,14 @@ if (/* ③の処理を書く */){
 }
 
 //⑥データベースへ接続し、接続情報を変数に保存する
-
+$dbname = "zaiko2021_yse";
+$host = "localhost";
+$charset = "UTF8";
+$user =  "zaiko2021_yse";
+$password = "2021zaiko";
+$option = [PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION];
 //⑦データベースで使用する文字コードを「UTF8」にする
-
+$dsn = "mysql:dbname={$dbname};host={$host};charset={$charset}";
 //⑧POSTの「books」の値が空か判定する。空の場合はif文の中に入る。
 if(/* ⑧の処理を行う */){
 	//⑨SESSIONの「success」に「出荷する商品が選択されていません」と設定する。
