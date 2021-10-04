@@ -1,4 +1,5 @@
-<!-- bishnu -->
+<!-- bishnu 
+test -->
 
 <?php
 /* 
@@ -11,6 +12,7 @@
 */
 
 //①セッションを開始する
+session_start();
 
 function getByid($id,$con){
 	/* 
@@ -18,8 +20,24 @@ function getByid($id,$con){
 	 * その際にWHERE句でメソッドの引数の$idに一致する書籍のみ取得する。
 	 * SQLの実行結果を変数に保存する。
 	 */
+$dbname = "zaiko2021_yse";
+$host = "localhost";
+$charset ="UTF8";
+$user = "zaiko2021_yse";
+$option = [PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION];
 
+$sql ="SELECT * from books where id<26";
+try
+{
+	$pdo = new PDO($dsn,$user,$password,$option);
+}catch(PDOException $e)
+{
+	die($e->getMessage());
+}
+$statement = $pdo->query($sql);
+//$pdo = new PDO ($dsn,$user,$password,$option)
 	//③実行した結果から1レコード取得し、returnで値を返す。
+	return $books;
 }
 
 function updateByid($id,$con,$total){
@@ -28,6 +46,14 @@ function updateByid($id,$con,$total){
 	 * 引数で受け取った$totalの値で在庫数を上書く。
 	 * その際にWHERE句でメソッドの引数に$idに一致する書籍のみ取得する。
 	 */
+
+	$sql = "UPDATE items books 
+	title = :title,
+	price = :price,
+	stock = :stock
+	WHERE id = :id;";
+	$stmt = $pdo->prepare($sql);
+	return $stmt->execute($data);
 }
 
 //⑤SESSIONの「login」フラグがfalseか判定する。「login」フラグがfalseの場合はif文の中に入る。
