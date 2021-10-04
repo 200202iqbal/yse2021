@@ -116,7 +116,7 @@ $statement = $pdo->query($sql);
 							extract($book);
 
 							echo "<tr id='book'>";
-							echo "<td id='check'><input type='checkbox' name='books[]'value=".$id."></td>";
+							echo "<td id='check'><input type='checkbox' name='books[]' value=".$books["id"]."></td>";
 							echo "<td id='id'>".$id."</td>";
 							echo "<td id='title'>".$title."</td>";
 							echo "<td id='author'>".$author."</td>";
