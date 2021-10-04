@@ -33,10 +33,20 @@ $password = "2021zaiko";
 $option = [PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION];
 //⑦データベースで使用する文字コードを「UTF8」にする
 $dsn = "mysql:dbname={$dbname};host={$host};charset={$charset}";
+try
+{
+	$pdo = new PDO($dsn,$user,$password,$option);
+	// echo "SUCCESS";
+}catch(PDOException $e)
+{
+	die($e->getMessage());
+}
 //⑧POSTの「books」の値が空か判定する。空の場合はif文の中に入る。
-if(/* ⑧の処理を行う */){
+if(empty($_POST["books"])){
 	//⑨SESSIONの「success」に「出荷する商品が選択されていません」と設定する。
+	
 	//⑩在庫一覧画面へ遷移する。
+	header("Location: zaiko_ichiran.php");
 }
 
 function getId($id,$con){
@@ -45,8 +55,15 @@ function getId($id,$con){
 	 * その際にWHERE句でメソッドの引数の$idに一致する書籍のみ取得する。
 	 * SQLの実行結果を変数に保存する。
 	 */
+	$sql = "SELECT * FROM books";
+	$id = htmlspecialchars($id);
+	$sql = "SELECT * FROM books WHERE id = '{$id}'";
+    $statement = $con->query($sql);
+    
 
 	//⑫実行した結果から1レコード取得し、returnで値を返す。
+	$statement->fetch(PDO::FETCH_ASSOC);
+	return $statement->execute($sql);
 }
 ?>
 <!DOCTYPE html>
