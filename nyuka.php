@@ -100,6 +100,9 @@ function getId($id,$con){
 			 * ⑬SESSIONの「error」にメッセージが設定されているかを判定する。
 			 * 設定されていた場合はif文の中に入る。
 			 */ 
+			var_dump($_POST["books"]);
+			
+			
 			// if(/* ⑬の処理を書く */){
 			// 	//⑭SESSIONの「error」の中身を表示する。
 			// }
@@ -123,6 +126,7 @@ function getId($id,$con){
 					//  * ⑮POSTの「books」から一つずつ値を取り出し、変数に保存する。
 					//  */
 					$ids = $_POST["books"];
+					//var_dump($_POST["books"]);
     				 foreach($ids as $id):
     				// ⑯「getId」関数を呼び出し、変数に戻り値を入れる。その際引数に⑮の処理で取得した値と⑥のDBの接続情報を渡す。	
 					$selectedBook = getId($id,$pdo);
