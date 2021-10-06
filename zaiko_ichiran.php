@@ -70,11 +70,13 @@ $statement = $pdo->query($sql);
 				 * 設定されていた場合はif文の中に入る。
 				 */ //debug -> $_SESSION["success"] = "ログインが成功";
 				// debug -> unset($_SESSION["success"]);
-
+				
 				// if(isset($_SESSION["success"])){
-				// 	//⑨SESSIONの「success」の中身を表示する。
-					// echo "<p>".$_SESSION["success"]."</p>";
-				// }else
+				// // 	//⑨SESSIONの「success」の中身を表示する。
+				// 	echo "<p>".$_SESSION["success"]."</p>";
+				// 	var_dump($_SESSION["success"]);
+				}
+				// else
 				// {
 					// echo "<p> エラーがあります　</p>";
 				// }
