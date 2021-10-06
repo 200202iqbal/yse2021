@@ -14,11 +14,9 @@
 */
 //⑥セッションを開始する
 session_start();
-if(isset($_POST["decision"])){
-}
 //①名前とパスワードを入れる変数を初期化する
-$name = "yse";
-$password = "2021";
+$name = "";
+$password = "";
 
 /*
  * ②ログインボタンが押されたかを判定する。
@@ -33,10 +31,10 @@ if (isset($_POST["decision"]) && $_POST["decision"] == 1) {
 	 $name = $_POST['name'];
 	 $password = $_POST['pass'];
 	
+	
 }else{
 	$error_message = '名前が未入力です。';
-	}
-}
+}}
 
 	
 	// if (/* ③の処理を書く */) {
@@ -53,9 +51,8 @@ if (isset($_POST["decision"]) && $_POST["decision"] == 1) {
 	if($name == $userAdmin && $password == $passwordAdmin){
 		$_SESSION["user"] = $name;
 		$_SESSION["login"] = true;
-		echo $nem;
-		echo $password;
-		header("location: zaiko_ichiran.php");
+		
+		header("Location: zaiko_ichiran.php");
 	}
 	else{
 		$error_message = "ユーザー名かパスワードがまちがっています。";
