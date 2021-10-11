@@ -16,14 +16,14 @@ function getByid($id,$con){
 	 * その際にWHERE句でメソッドの引数の$idに一致する書籍のみ取得する。
 	 * SQLの実行結果を変数に保存する。
 	 */
-	$sql = "SELECT * FROM books";
+	
 	$id = htmlspecialchars($id);
-	$sql = "SELECT * FROM books WHERE id = '{$id}'";
+	$sql = "SELECT * FROM books WHERE id = {$id}";
     $statement = $con->query($sql);
 
 	//③実行した結果から1レコード取得し、returnで値を返す。
-	$statement->fetch(PDO::FETCH_ASSOC);
-	return $statement->execute($sql);
+	$items = $statement->fetch(PDO::FETCH_ASSOC);
+	return $items;
 }
 
 function updateByid($id,$con,$total){
