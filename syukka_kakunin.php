@@ -159,15 +159,20 @@ if(/* ㉓の処理を書く */){
 						$selectBook = geetId($id,$pdo);
 					?>
 					<tr>
-						<td><?php echo	/* ㉟ ㉞で取得した書籍情報からtitleを表示する。 */;?></td>
-						<td><?php echo	/* ㊱ ㉞で取得した書籍情報からstockを表示する。 */;?></td>
-						<td><?php echo	/* ㊲ POSTの「stock」に設定されている値を㉜の変数を使用して呼び出す。 */;?></td>
+						<td><?php echo	/* ㉟ ㉞で取得した書籍情報からtitleを表示する。 */
+						$selectBook["title"];?></td>
+						<td><?php echo	/* ㊱ ㉞で取得した書籍情報からstockを表示する。 */
+						$selectBook["stock"];?></td>
+						<td id="post"><?php echo	/* ㊲ POSTの「stock」に設定されている値を㉜の変数を使用して呼び出す。 */
+						$selectBook["stock"];?></td>
 					</tr>
 					<input type="hidden" name="books[]" value="<?php echo /* ㊳ ㉝で取得した値を設定する */;?>">
 					<input type="hidden" name="stock[]" value='<?php echo /* ㊴「POSTの「stock」に設定されている値を㉜の変数を使用して設定する。 */;?>'>
 					<?php
 						//㊵ ㉜で宣言した変数をインクリメントで値を1増やす。
-					}
+						echo "<h3>Postdecrement</h3>";
+						$a = 1;
+						echo "increment value by 1" . $a-- . "<br />\n";
 					?>
 				</tbody>
 			</table>
