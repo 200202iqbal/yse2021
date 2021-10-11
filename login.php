@@ -89,10 +89,10 @@ if(isset($_REQUEST['check'])){
 		<h1>ログイン</h1>
 		<?php 
 		//⑮エラーメッセージの変数に入っている値を表示する 
-		echo "<div id='error'>", "blah blah ", "</div>";
+		echo "<div id='error'>". "blah blah ". "</div>";
 		
 		//⑯メッセージの変数に入っている値を表示する 
-		echo "<div id='msg'>", "blah blah", "</div>"; 
+		echo "<div id='msg'>"."blah blah". "</div>"; 
 		?>
 		<form action="login.php" method="post" id="log">
 			<p>
