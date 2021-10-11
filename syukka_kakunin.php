@@ -1,4 +1,5 @@
 <!-- bishnu 
+test test 2
 test -->
 
 <?php
@@ -152,8 +153,10 @@ if(/* ㉓の処理を書く */){
 					//㉜書籍数をカウントするための変数を宣言し、値を0で初期化する。
 
 					//㉝POSTの「books」から値を取得し、変数に設定する。
-					foreach(/* ㉝の処理を書く */){
+					$ids = $_POST["books"];
+					foreach(/* ㉝の処理を書く */ $ids as $id){
 						//㉞「getByid」関数を呼び出し、変数に戻り値を入れる。その際引数に㉜の処理で取得した値と⑧のDBの接続情報を渡す。
+						$selectBook = geetId($id,$pdo);
 					?>
 					<tr>
 						<td><?php echo	/* ㉟ ㉞で取得した書籍情報からtitleを表示する。 */;?></td>
