@@ -73,6 +73,9 @@ if (isset($_POST["decision"]) && $_POST["decision"] == 1) {
 // 	//⑬SESSIONの「error2」の値をエラーメッセージを入れる変数に設定する。
 // 	//⑭SESSIONの「error2」にnullを入れる。
 // }
+if(isset($_REQUEST['check'])){
+	echo'null';
+}
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -86,10 +89,10 @@ if (isset($_POST["decision"]) && $_POST["decision"] == 1) {
 		<h1>ログイン</h1>
 		<?php 
 		//⑮エラーメッセージの変数に入っている値を表示する 
-		//echo "<div id='error'>", /* ⑮の変数を書く */, "</div>";
+		echo "<div id='error'>", "blah blah ", "</div>";
 		
 		//⑯メッセージの変数に入っている値を表示する 
-		//echo "<div id='msg'>", /* ⑯の変数を書く */, "</div>"; 
+		echo "<div id='msg'>", "blah blah", "</div>"; 
 		?>
 		<form action="login.php" method="post" id="log">
 			<p>
