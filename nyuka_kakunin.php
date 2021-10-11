@@ -67,6 +67,7 @@ try
 }
 
 //⑩書籍数をカウントするための変数を宣言し、値を0で初期化する
+$count = 0;
 
 //⑪POSTの「books」から値を取得し、変数に設定する。
 // foreach(/* ⑪の処理を書く */){
@@ -93,6 +94,7 @@ try
 // 	}
 	
 // 	//㉒ ⑩で宣言した変数をインクリメントで値を1増やす。
+	$count++;
 // }
 
 /*
@@ -140,6 +142,7 @@ try
 						<?php
 						//㉜書籍数をカウントするための変数を宣言し、値を0で初期化する。
 						$count = 0;
+						//var_dump($_POST["stock"]);
 						//㉝POSTの「books」から値を取得し、変数に設定する。
 						$ids = $_POST["books"];
 						foreach($ids as $id){
@@ -149,12 +152,14 @@ try
 						<tr>
 							<td><?php echo	/* ㉟ ㉞で取得した書籍情報からtitleを表示する。 */$selectedBook["title"];?></td>
 							<td><?php echo	/* ㊱ ㉞で取得した書籍情報からstockを表示する。 */$selectedBook["stock"];?></td>
-							<td><?php echo	/* ㊱ POSTの「stock」に設定されている値を㉜の変数を使用して呼び出す。 */$count;?></td>
+							<td><?php echo	/* ㊱ POSTの「stock」に設定されている値を㉜の変数を使用して呼び出す。 */$stock = $_POST["stock"][$count]?></td>
 						</tr>
 						<input type="hidden" name="books[]" value="<?php echo /* ㊲ ㉝で取得した値を設定する */$selectedBook["id"]; ?>">
-						<input type="hidden" name="stock[]" value='<?php echo /* ㊳POSTの「stock」に設定されている値を㉜の変数を使用して設定する。 */$count = $_POST["stock"];?>'>
+						
+						<input type="hidden" name="stock[]" value='<?php echo /* ㊳POSTの「stock」に設定されている値を㉜の変数を使用して設定する。 */$stock;?>'>
 						<?php
 							//㊴ ㉜で宣言した変数をインクリメントで値を1増やす。
+							$count++;
 						}
 						?>
 					</tbody>

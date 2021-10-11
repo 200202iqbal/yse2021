@@ -97,7 +97,7 @@ function getId($id,$con){
 		</nav>
 	</div>
 
-	<form action="nyuka_kakunin.php" method="post">
+	<form action="nyuka_kakunin.php" method="post"> 
 		<div id="pagebody">
 			<!-- エラーメッセージ -->
 			<div id="error">
