@@ -22,6 +22,7 @@ if (session_status() == PHP_SESSION_NONE) {
 
 
 //③SESSIONの「login」フラグがfalseか判定する。「login」フラグがfalseの場合はif文の中に入る。
+
 // if (/* ③の処理を書く */){
 // 	//④SESSIONの「error2」に「ログインしてください」と設定する。
 // 	//⑤ログイン画面へ遷移する。
