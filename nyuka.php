@@ -106,7 +106,7 @@ function getId($id,$con){
 			 * ⑬SESSIONの「error」にメッセージが設定されているかを判定する。
 			 * 設定されていた場合はif文の中に入る。
 			 */ 
-			var_dump($_POST["books"]);
+			//var_dump($_POST["books"]);
 			
 			
 			// if(/* ⑬の処理を書く */){
