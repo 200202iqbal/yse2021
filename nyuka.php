@@ -55,6 +55,9 @@ if(empty($_POST["books"])){
 	$_SESSION["success"] = "入荷する商品が選択されていません";
 	//⑩在庫一覧画面へ遷移する。
 	header("Location: zaiko_ichiran.php");
+}else
+{
+	unset($_SESSION["success"]);
 }
 //var_dump($_POST);
 function getId($id,$con){

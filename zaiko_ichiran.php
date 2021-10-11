@@ -15,7 +15,7 @@ session_start();
 $_SESSION["account_name"] = $_SESSION["user"];
 
 // ②SESSIONの「login」フラグがfalseか判定する。「login」フラグがfalseの場合はif文の中に入る。
-if ($_SESSION["login"] == false){
+if ($_SESSION["login"] == false || !isset($_SESSION["user"])){
 // 	// ③SESSIONの「error2」に「ログインしてください」と設定する。
 	$_SESSION["error2"] = "ログインしてください";
 // 	// ④ログイン画面へ遷移する。
@@ -74,6 +74,7 @@ $statement = $pdo->query($sql);
 				 if(isset($_SESSION["success"])){
 				// // 	//⑨SESSIONの「success」の中身を表示する。
 				 	echo "<p>".@$_SESSION["success"]."</p>";
+					unset($_SESSION["success"]);
 				 	//var_dump($_SESSION["success"]);
 				 }
 				?>
