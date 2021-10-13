@@ -80,12 +80,20 @@ $dsn = "mysql:dbname={$dbname};host={$host};charset={$charset}";
 $count =0;
 //⑪POSTの「books」から値を取得し、変数に設定する。
 $sql = "SELECT * FROM books where id={POST}";
-foreach(/* ⑪の処理を書く */){
+$ids = $_POST["books"];
+foreach(/* ⑪の処理を書く */$books as $book){
 	/*
 	 * ⑫POSTの「stock」について⑩の変数の値を使用して値を取り出す。
 	 * 半角数字以外の文字が設定されていないかを「is_numeric」関数を使用して確認する。
 	 * 半角数字以外の文字が入っていた場合はif文の中に入る。
 	 */
+//	is_numeric($element)
+	// echo
+	// if(isset($_REQUEST['check']))
+	// echo '';
+//   }else{
+    // echo '';
+//   }
 	if (/* ⑫の処理を書く */) {
 		//⑬SESSIONの「error」に「数値以外が入力されています」と設定する。
 		//⑭「include」を使用して「syukka.php」を呼び出す。
@@ -100,11 +108,13 @@ foreach(/* ⑪の処理を書く */){
 	if(/* ⑱の処理を行う */){
 		//⑲SESSIONの「error」に「出荷する個数が在庫数を超えています」と設定する。
 		//⑳「include」を使用して「syukka.php」を呼び出す。
+		// include 'syukka.php';
 		//㉑「exit」関数で処理を終了する。
+		// exit;
 	}
 	
 	//㉒ ⑩で宣言した変数をインクリメントで値を1増やす。
-	
+	$count++;
 }
 
 /*
