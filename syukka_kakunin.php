@@ -96,8 +96,11 @@ foreach(/* ⑪の処理を書く */$books as $book){
 //   }
 	if (/* ⑫の処理を書く */) {
 		//⑬SESSIONの「error」に「数値以外が入力されています」と設定する。
+		// isset
 		//⑭「include」を使用して「syukka.php」を呼び出す。
+		// include 'syukka.php';
 		//⑮「exit」関数で処理を終了する。
+		// exit;
 	}
 
 	//⑯「getByid」関数を呼び出し、変数に戻り値を入れる。その際引数に⑪の処理で取得した値と⑧のDBの接続情報を渡す。
