@@ -1,5 +1,4 @@
 <!-- bishnu 
-test test 2
 test -->
 
 <?php
@@ -21,13 +20,24 @@ function getByid($id,$con){
 	 * その際にWHERE句でメソッドの引数の$idに一致する書籍のみ取得する。
 	 * SQLの実行結果を変数に保存する。
 	 */
-	$sql= "select * from books where id = {id}";
-		
-$pdo = new PDO ($dsn,$user,$password,$option);
-$stmt = "$con->query($sql)";
+$dbname = "zaiko2021_yse";
+$host = "localhost";
+$charset ="UTF8";
+$user = "zaiko2021_yse";
+$option = [PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION];
+
+$sql ="SELECT * from books where id<26";
+try
+{
+	$pdo = new PDO($dsn,$user,$password,$option);
+}catch(PDOException $e)
+{
+	die($e->getMessage());
+}
+$statement = $pdo->query($sql);
+//$pdo = new PDO ($dsn,$user,$password,$option)
 	//③実行した結果から1レコード取得し、returnで値を返す。
-	$items =  $statement->fetch(PDO::FETCH_ASSOC);
-	return $items;
+	return $books;
 }
 
 function updateByid($id,$con,$total){
@@ -44,42 +54,22 @@ function updateByid($id,$con,$total){
 	// WHERE id = :id;";
 	// $stmt = $pdo->prepare($sql);
 	// return $stmt->execute($data);
-	$id = htmlspecialchars($id);
-	// $total
-	$sql = "UPDATE books set stock = :stock where id = :id";
-	$sql = "SELECT * FROM books WHERE id = {$id} ";
-	$stmt= "$con->prepare($sql)";
-	return $stmt->execute();
+
 }
 
 //⑤SESSIONの「login」フラグがfalseか判定する。「login」フラグがfalseの場合はif文の中に入る。
-if (/* ⑤の処理を書く */$_SESSION["login"] == false){
+if (/* ⑤の処理を書く */){
 	//⑥SESSIONの「error2」に「ログインしてください」と設定する。
-	($_SESSION["login"] == error2);
 	//⑦ログイン画面へ遷移する。
-	$dbname = "zaiko2021_yse";
-$host = "localhost";
-$charset = "UTF8";
-$user =  "zaiko2021_yse";
-$password = "2021zaiko";
-$option = [PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION];
 }
 
 //⑧データベースへ接続し、接続情報を変数に保存する
-$dbname = "zaiko2021_yse";
-$host = "localhost";
-$charset = "UTF8";
-$user =  "zaiko2021_yse";
-$password = "2021zaiko";
-$option = [PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION];
 
 //⑨データベースで使用する文字コードを「UTF8」にする
-$dsn = "mysql:dbname={$dbname};host={$host};charset={$charset}";
 
 //⑩書籍数をカウントするための変数を宣言し、値を0で初期化する
-$count =0;
+
 //⑪POSTの「books」から値を取得し、変数に設定する。
-$sql = "SELECT * FROM books where id={POST}";
 foreach(/* ⑪の処理を書く */){
 	/*
 	 * ⑫POSTの「stock」について⑩の変数の値を使用して値を取り出す。
@@ -104,7 +94,6 @@ foreach(/* ⑪の処理を書く */){
 	}
 	
 	//㉒ ⑩で宣言した変数をインクリメントで値を1増やす。
-	
 }
 
 /*
@@ -151,29 +140,21 @@ if(/* ㉓の処理を書く */){
 				<tbody>
 					<?php 
 					//㉜書籍数をカウントするための変数を宣言し、値を0で初期化する。
-					$count = 0;
 
 					//㉝POSTの「books」から値を取得し、変数に設定する。
-					$ids = $_POST["books"];
-					foreach(/* ㉝の処理を書く */ $ids as $id){
+					foreach(/* ㉝の処理を書く */){
 						//㉞「getByid」関数を呼び出し、変数に戻り値を入れる。その際引数に㉜の処理で取得した値と⑧のDBの接続情報を渡す。
-						$selectBook = geetId($id,$pdo);
 					?>
 					<tr>
-						<td><?php echo	/* ㉟ ㉞で取得した書籍情報からtitleを表示する。 */
-						$selectBook["title"];?></td>
-						<td><?php echo	/* ㊱ ㉞で取得した書籍情報からstockを表示する。 */
-						$selectBook["stock"];?></td>
-						<td id="post"><?php echo	/* ㊲ POSTの「stock」に設定されている値を㉜の変数を使用して呼び出す。 */
-						$selectBook["stock"];?></td>
+						<td><?php echo	/* ㉟ ㉞で取得した書籍情報からtitleを表示する。 */;?></td>
+						<td><?php echo	/* ㊱ ㉞で取得した書籍情報からstockを表示する。 */;?></td>
+						<td><?php echo	/* ㊲ POSTの「stock」に設定されている値を㉜の変数を使用して呼び出す。 */;?></td>
 					</tr>
 					<input type="hidden" name="books[]" value="<?php echo /* ㊳ ㉝で取得した値を設定する */;?>">
 					<input type="hidden" name="stock[]" value='<?php echo /* ㊴「POSTの「stock」に設定されている値を㉜の変数を使用して設定する。 */;?>'>
 					<?php
 						//㊵ ㉜で宣言した変数をインクリメントで値を1増やす。
-						echo "<h3>Postdecrement</h3>";
-						$a = 1;
-						echo "increment value by 1" . $a-- . "<br />\n";
+					}
 					?>
 				</tbody>
 			</table>
