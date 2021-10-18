@@ -112,7 +112,7 @@ function getId($id,$con){
 			//var_dump($_POST["books"]);
 			
 			
-			if($_SESSION["error"]){
+			if(isset($_SESSION["error"])){
 				//⑭SESSIONの「error」の中身を表示する。
 				echo '<p>'.$_SESSION["error"].'</p>';
 				$_SESSION["error"]="";

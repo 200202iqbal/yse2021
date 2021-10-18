@@ -21,11 +21,12 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 
 //③SESSIONの「login」フラグがfalseか判定する。「login」フラグがfalseの場合はif文の中に入る。
-if ($_SESSION["login"] == false){
+if (!isset($_SESSION["user"]) || $_SESSION["login"] == false){
 	//④SESSIONの「error2」に「ログインしてください」と設定する。
 	$_SESSION["error2"] = "ログインしてください";
 	//⑤ログイン画面へ遷移する。
 	header("Location: login.php");
+	exit;
 }
 
 //⑥データベースへ接続し、接続情報を変数に保存する
@@ -128,7 +129,6 @@ function getId($id,$con){
 				 * ⑮POSTの「books」から一つずつ値を取り出し、変数に保存する。
 				 */
 				$ids = $_POST["books"];
-
 				foreach(/* ⑮の処理を書く */$ids as $id){
 					// ⑯「getId」関数を呼び出し、変数に戻り値を入れる。その際引数に⑮の処理で取得した値と⑥のDBの接続情報を渡す。
 					$selectedBook = getId($id,$pdo);

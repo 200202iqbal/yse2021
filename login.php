@@ -30,11 +30,12 @@ if (isset($_POST["decision"]) && $_POST["decision"] == 1) {
 	if(!empty($_POST['name']) && !empty($_POST['pass'])){
 	 $name = $_POST['name'];
 	 $password = $_POST['pass'];
-	
-	
-}else{
-	$error_message1 = 'ユーザー名かパスワードがまちがっています。';
-}}
+	}
+	else
+	{
+		$error_message[1]= "名前かパスワードが未入力です";
+	}
+}
 
 	
 	// if (/* ③の処理を書く */) {
@@ -45,7 +46,7 @@ if (isset($_POST["decision"]) && $_POST["decision"] == 1) {
 
 
 //⑦名前が入力されているか判定する。入力されていた場合はif文の中に入る
- if (isset($name)) {
+ if (!empty($name)) {
  $userAdmin = "yse";
  $passwordAdmin = "2021";
 	if($name == $userAdmin && $password == $passwordAdmin){
@@ -55,7 +56,7 @@ if (isset($_POST["decision"]) && $_POST["decision"] == 1) {
 		header("Location: zaiko_ichiran.php");
 	}
 	else{
-		$error_message2 = "ユーザー名かパスワードがまちがっています。";
+		$error_message[2] = "ユーザー名かパスワードがまちがっています。";
 	}
 }
 // 	//⑧名前に「yse」、パスワードに「2021」と設定されているか確認する。設定されていた場合はif文の中に入る
@@ -90,10 +91,11 @@ if(isset($_SESSION['error2'])){
 		<h1>ログイン</h1>
 		<?php 
 		//⑮エラーメッセージの変数に入っている値を表示する 
-		echo "<div id='error'>". "ユーザー名かパスワードがまちがっています。 ". "</div>";
+		echo "<div id='error'>".@$error_message[1]. "</div>";
 		
 		//⑯メッセージの変数に入っている値を表示する 
-		echo "<div id='msg'>"."ログインしてください。". "</div>"; 
+		echo "<div id='msg'>".@$error_message[2]. "</div>"; 
+		
 		?>
 		<form action="login.php" method="post" id="log">
 			<p>

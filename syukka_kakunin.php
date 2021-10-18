@@ -13,6 +13,13 @@ test -->
 
 //①セッションを開始する
 session_start();
+if ( !isset($_SESSION["user"]) ||$_SESSION["login"]==false){
+	//④SESSIONの「error2」に「ログインしてください」と設定する。
+	$_SESSION["error2"] = "ログインしてください";
+	//⑤ログイン画面へ遷移する。
+	header("Location: login.php");
+	exit;
+}
 
 function getByid($id,$con){
 	/* 
@@ -93,7 +100,7 @@ foreach($ids as $id){
 	//⑯「getByid」関数を呼び出し、変数に戻り値を入れる。その際引数に⑪の処理で取得した値と⑧のDBの接続情報を渡す。
 	$selectedBook = getByid($id,$pdo);
 	//⑰ ⑯で取得した書籍の情報の「stock」と、⑩の変数を元にPOSTの「stock」から値を取り出して書籍情報の「stock」から値を引いた値を変数に保存する。
-	$total_stock = $selectedBook["stock"] + $_POST["stock"][$count];
+	$total_stock = $selectedBook["stock"] - $_POST["stock"][$count];
 	//⑱ ⑰の値が0未満か判定する。0未満の場合はif文の中に入る。
 	if($total_stock<0){
 		//⑲SESSIONの「error」に「出荷する個数が在庫数を超えています」と設定する。
@@ -121,7 +128,7 @@ if(isset($_POST["add"]) && $_POST["add"]=="ok"){
 		//㉖「getByid」関数を呼び出し、変数に戻り値を入れる。その際引数に㉕の処理で取得した値と⑧のDBの接続情報を渡す。
 		$selectedBook = getByid($id,$pdo);
 		//㉗ ㉖で取得した書籍の情報の「stock」と、㉔の変数を元にPOSTの「stock」から値を取り出して書籍情報の「stock」から値を引いた値を変数に保存する。
-		$total_stock = $selectedBook["stock"] + $_POST["stock"][$count];
+		$total_stock = $selectedBook["stock"] - $_POST["stock"][$count];
 		//㉘「updateByid」関数を呼び出す。その際に引数に㉕の処理で取得した値と⑧のDBの接続情報と㉗で計算した値を渡す。
 		updateByid($id,$pdo,$total_stock);
 		//㉙ ㉔で宣言した変数をインクリメントで値を1増やす。

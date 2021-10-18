@@ -10,6 +10,13 @@
 
 //①セッションを開始する
 session_start();
+if ( !isset($_SESSION["user"]) ||$_SESSION["login"]==false){
+	//④SESSIONの「error2」に「ログインしてください」と設定する。
+	$_SESSION["error2"] = "ログインしてください";
+	//⑤ログイン画面へ遷移する。
+	header("Location: login.php");
+	exit;
+}
 function getByid($id,$con){
 	/* 
 	 * ②書籍を取得するSQLを作成する実行する。
