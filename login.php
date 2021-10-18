@@ -33,7 +33,7 @@ if (isset($_POST["decision"]) && $_POST["decision"] == 1) {
 	
 	
 }else{
-	$error_message = '名前が未入力です。';
+	$error_message1 = 'ユーザー名かパスワードがまちがっています。';
 }}
 
 	
@@ -55,7 +55,7 @@ if (isset($_POST["decision"]) && $_POST["decision"] == 1) {
 		header("Location: zaiko_ichiran.php");
 	}
 	else{
-		$error_message = "ユーザー名かパスワードがまちがっています。";
+		$error_message2 = "ユーザー名かパスワードがまちがっています。";
 	}
 }
 // 	//⑧名前に「yse」、パスワードに「2021」と設定されているか確認する。設定されていた場合はif文の中に入る
@@ -73,9 +73,9 @@ if (isset($_POST["decision"]) && $_POST["decision"] == 1) {
 // 	//⑬SESSIONの「error2」の値をエラーメッセージを入れる変数に設定する。
 // 	//⑭SESSIONの「error2」にnullを入れる。
 // }
-if(isset($_REQUEST['check'])){
-	
-	echo'null';
+if(isset($_SESSION['error2'])){
+	$errormsg = $_SESSION['error2'];
+		$_SESSION['error2'] = null;
 }
 ?>
 <!DOCTYPE html>
