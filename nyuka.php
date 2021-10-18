@@ -112,9 +112,11 @@ function getId($id,$con){
 			//var_dump($_POST["books"]);
 			
 			
-			// if(/* ⑬の処理を書く */){
-			// 	//⑭SESSIONの「error」の中身を表示する。
-			// }
+			if($_SESSION["error"])){
+				//⑭SESSIONの「error」の中身を表示する。
+				echo '<p>'.$_SESSION["error"].'</p>';
+				$_SESSION["error"]="";
+			}
 			?>
 			</div>
 			<div id="center">
