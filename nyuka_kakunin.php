@@ -77,7 +77,7 @@ $ids = $_POST["books"];
 // 	 * 半角数字以外の文字が設定されていないかを「is_numeric」関数を使用して確認する。
 // 	 * 半角数字以外の文字が入っていた場合はif文の中に入る。
 // 	 */
-	if (!is_numeric($_POST["stock"][$count]) {
+	if (!is_numeric($_POST["stock"][$count])) {
 		//⑬SESSIONの「error」に「数値以外が入力されています」と設定する。
 		$_SESSION["error"]="数値以外が入力されています";
 		//⑭「include」を使用して「nyuka.php」を呼び出す。
@@ -102,7 +102,7 @@ $ids = $_POST["books"];
 	
 // 	//㉒ ⑩で宣言した変数をインクリメントで値を1増やす。
 	$count++;
-// }
+ }
 
 /*
  * ㉓POSTでこの画面のボタンの「add」に値が入ってるか確認する。
