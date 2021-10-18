@@ -61,13 +61,15 @@ function getId($id,$con){
 	 */
 	$sql = "SELECT * FROM books";
 	$id = htmlspecialchars($id);
-	$sql = "SELECT * FROM books WHERE id = '{$id}'";
-    $statement = $con->query($sql);
+	$sql = "SELECT * FROM books WHERE :id = id";
+    $statement = $con->prepare($sql);
+	$statement->execute([":id" => $id]);
     
 
 	//⑫実行した結果から1レコード取得し、returnで値を返す。
-	$statement->fetch(PDO::FETCH_ASSOC);
-	return $statement->execute($sql);
+	return $statement->fetch(PDO::FETCH_ASSOC);
+	//return $statement->execute($sql);
+	
 }
 ?>
 <!DOCTYPE html>
