@@ -36,7 +36,7 @@ function updateByid($id,$con,$total){
 	$id = htmlspecialchars($id);
 	$sql = "UPDATE books SET stock = '{$total}' WHERE id ={$id}";
     $statement = $con->prepare($sql);
-	return $statement->execute($sql);
+	return $statement->execute();
 }
 
 //⑤SESSIONの「login」フラグがfalseか判定する。「login」フラグがfalseの場合はif文の中に入る。
