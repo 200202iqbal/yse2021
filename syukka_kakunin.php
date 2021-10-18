@@ -38,11 +38,7 @@ function updateByid($id,$con,$total){
 	$id = htmlspecialchars($id);
 	$sql = "UPDATE books SET stock = '{$total}' WHERE :id=id";
     $statement = $con->prepare($sql);
-<<<<<<< HEAD
-	return $statement->execute();
-=======
 	return $statement->execute([":id"=> $id]);
->>>>>>> e1610147a8ecd3e0d7a018d9f020fbf0738d06df
 
 }
 
