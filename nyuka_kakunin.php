@@ -70,28 +70,35 @@ try
 $count = 0;
 
 //⑪POSTの「books」から値を取得し、変数に設定する。
-// foreach(/* ⑪の処理を書く */){
+$ids = $_POST["books"];
+  foreach($ids as $id){
 // 	/*
 // 	 * ⑫POSTの「stock」について⑩の変数の値を使用して値を取り出す。
 // 	 * 半角数字以外の文字が設定されていないかを「is_numeric」関数を使用して確認する。
 // 	 * 半角数字以外の文字が入っていた場合はif文の中に入る。
 // 	 */
-// 	if (/* ⑫の処理を書く */) {
-// 		//⑬SESSIONの「error」に「数値以外が入力されています」と設定する。
-// 		//⑭「include」を使用して「nyuka.php」を呼び出す。
-// 		//⑮「exit」関数で処理を終了する。
-// 	}
+	if (!is_numeric($_POST["stock"][$count]) {
+		//⑬SESSIONの「error」に「数値以外が入力されています」と設定する。
+		$_SESSION["error"]="数値以外が入力されています";
+		//⑭「include」を使用して「nyuka.php」を呼び出す。
+		include("nyuka.php");
+		//⑮「exit」関数で処理を終了する。
+		exit;
+	}
 
-// 	//⑯「getByid」関数を呼び出し、変数に戻り値を入れる。その際引数に⑪の処理で取得した値と⑧のDBの接続情報を渡す。
-
-// 	//⑰ ⑯で取得した書籍の情報の「stock」と、⑩の変数を元にPOSTの「stock」から値を取り出し、足した値を変数に保存する。
-
-// 	//⑱ ⑰の値が100を超えているか判定する。超えていた場合はif文の中に入る。
-// 	if(/* ⑱の処理を行う */){
-// 		//⑲SESSIONの「error」に「最大在庫数を超える数は入力できません」と設定する。
-// 		//⑳「include」を使用して「nyuka.php」を呼び出す。
-// 		//㉑「exit」関数で処理を終了する。
-// 	}
+	//⑯「getByid」関数を呼び出し、変数に戻り値を入れる。その際引数に⑪の処理で取得した値と⑧のDBの接続情報を渡す。
+	$selectedBook = getByid($id,$pdo);
+ 	//⑰ ⑯で取得した書籍の情報の「stock」と、⑩の変数を元にPOSTの「stock」から値を取り出し、足した値を変数に保存する。
+	 $total_stock = $selectedBook["stock"] + $_POST["stock"][$count];
+ 	//⑱ ⑰の値が100を超えているか判定する。超えていた場合はif文の中に入る。
+ 	if($total_stock>100){
+ 		//⑲SESSIONの「error」に「最大在庫数を超える数は入力できません」と設定する。
+		 $_SESSION["error"]="最大在庫数を超える入力は出来ません";
+ 		//⑳「include」を使用して「nyuka.php」を呼び出す。
+		 include("nyuka.php");
+ 		//㉑「exit」関数で処理を終了する。
+		 exit;
+ 	}
 	
 // 	//㉒ ⑩で宣言した変数をインクリメントで値を1増やす。
 	$count++;
@@ -101,20 +108,27 @@ $count = 0;
  * ㉓POSTでこの画面のボタンの「add」に値が入ってるか確認する。
  * 値が入っている場合は中身に「ok」が設定されていることを確認する。
  */
-// if(/* ㉓の処理を書く */){
-// 	//㉔書籍数をカウントするための変数を宣言し、値を0で初期化する。
+if(isset($_POST["add"]) && $_POST["add"]=="ok"){
+	//㉔書籍数をカウントするための変数を宣言し、値を0で初期化する。
+	$count =0;
+	//㉕POSTの「books」から値を取得し、変数に設定する。
+	$ids = $_POST["books"];
+	foreach($ids as $id){
+		//㉖「getByid」関数を呼び出し、変数に戻り値を入れる。その際引数に㉕の処理で取得した値と⑧のDBの接続情報を渡す。
+		$selectedBook = getByid($id,$pdo);
+		//㉗ ㉖で取得した書籍の情報の「stock」と、㉔の変数を元にPOSTの「stock」から値を取り出し、足した値を変数に保存する。
+		$total_stock = $selectedBook["stock"] + $_POST["stock"][$count];
+		//㉘「updateByid」関数を呼び出す。その際に引数に㉕の処理で取得した値と⑧のDBの接続情報と㉗で計算した値を渡す。
+		updateByid($id,$pdo,$total_stock);
+		//㉙ ㉔で宣言した変数をインクリメントで値を1増やす。
+		$count++;
+	}
 
-// 	//㉕POSTの「books」から値を取得し、変数に設定する。
-// 	foreach(/* ㉕の処理を書く */){
-// 		//㉖「getByid」関数を呼び出し、変数に戻り値を入れる。その際引数に㉕の処理で取得した値と⑧のDBの接続情報を渡す。
-// 		//㉗ ㉖で取得した書籍の情報の「stock」と、㉔の変数を元にPOSTの「stock」から値を取り出し、足した値を変数に保存する。
-// 		//㉘「updateByid」関数を呼び出す。その際に引数に㉕の処理で取得した値と⑧のDBの接続情報と㉗で計算した値を渡す。
-// 		//㉙ ㉔で宣言した変数をインクリメントで値を1増やす。
-// 	}
-
-// 	//㉚SESSIONの「success」に「入荷が完了しました」と設定する。
-// 	//㉛「header」関数を使用して在庫一覧画面へ遷移する。
-// }
+	//㉚SESSIONの「success」に「入荷が完了しました」と設定する。
+	$_SESSION["success"] ="入荷が完了しました";
+	//㉛「header」関数を使用して在庫一覧画面へ遷移する。
+	header("location:zaiko_ichiran.php");
+}
 ?>
 <!DOCTYPE html>
 <html lang="ja">

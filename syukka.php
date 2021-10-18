@@ -48,7 +48,7 @@ try
 //⑧POSTの「books」の値が空か判定する。空の場合はif文の中に入る。
 if(empty($_POST["books"])){
 	//⑨SESSIONの「success」に「出荷する商品が選択されていません」と設定する。
-
+	$_SESSION["success"] ="出荷する商品が選択されていません";
 	//⑩在庫一覧画面へ遷移する。
 	header("Location: zaiko_ichiran.php");
 }
@@ -101,8 +101,10 @@ function getId($id,$con){
 		 * ⑬SESSIONの「error」にメッセージが設定されているかを判定する。
 		 * 設定されていた場合はif文の中に入る。
 		 */ 
-		if(/* ⑬の処理を書く */){
+		if(isset($_SESSION["error"])){
 			//⑭SESSIONの「error」の中身を表示する。
+			echo '<p>'.$_SESSION["error"].'</p>';
+				$_SESSION["error"]="";
 		}
 		?>
 		</div>
