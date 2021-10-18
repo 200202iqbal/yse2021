@@ -18,8 +18,9 @@ function getByid($id,$con){
 	 */
 	
 	$id = htmlspecialchars($id);
-	$sql = "SELECT * FROM books WHERE id = {$id}";
-    $statement = $con->query($sql);
+	$sql = "SELECT * FROM books WHERE :id = $id";
+    $statement = $con->prepare($sql);
+	$statement->execute([":id" => $id]);
 
 	//③実行した結果から1レコード取得し、returnで値を返す。
 	$items = $statement->fetch(PDO::FETCH_ASSOC);
@@ -34,9 +35,13 @@ function updateByid($id,$con,$total){
 	 */
 	
 	$id = htmlspecialchars($id);
-	$sql = "UPDATE books SET stock = '{$total}' WHERE id ={$id}";
+	$sql = "UPDATE books SET stock = :total WHERE :id =id";
     $statement = $con->prepare($sql);
+<<<<<<< HEAD
 	return $statement->execute();
+=======
+	return $statement->execute([":total" => $total,":id" => $id]);
+>>>>>>> e1610147a8ecd3e0d7a018d9f020fbf0738d06df
 }
 
 //⑤SESSIONの「login」フラグがfalseか判定する。「login」フラグがfalseの場合はif文の中に入る。
