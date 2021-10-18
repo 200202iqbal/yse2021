@@ -67,6 +67,7 @@ function getId($id,$con){
 
 	//⑫実行した結果から1レコード取得し、returnで値を返す。
 	$statement->fetch(PDO::FETCH_ASSOC);
+	//return $statement->execute($sql);
 	return $statement->execute($sql);
 }
 ?>

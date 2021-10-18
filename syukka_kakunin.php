@@ -36,9 +36,9 @@ function updateByid($id,$con,$total){
 	 * その際にWHERE句でメソッドの引数に$idに一致する書籍のみ取得する。
 	 */
 	$id = htmlspecialchars($id);
-	$sql = "UPDATE books SET stock = '{$total}' WHERE id ={$id}";
+	$sql = "UPDATE books SET stock = '{$total}' WHERE :id=id";
     $statement = $con->prepare($sql);
-	return $statement->execute($sql);
+	return $statement->execute([":id"=> $id]);
 
 }
 
