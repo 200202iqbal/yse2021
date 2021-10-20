@@ -26,8 +26,8 @@ function getByid($id,$con){
 	
 	$id = htmlspecialchars($id);
 	$sql = "SELECT * FROM books WHERE :id = $id";
-    $statement = $con->prepare($sql);
-	$statement->execute([":id" => $id]);
+    $statement = $con->query($sql);
+	//$statement->execute([":id" => $id]);
 
 	//③実行した結果から1レコード取得し、returnで値を返す。
 	$items = $statement->fetch(PDO::FETCH_ASSOC);
