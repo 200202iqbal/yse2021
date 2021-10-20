@@ -2,6 +2,7 @@
 if(session_status() == PHP_SESSION_NONE)
 {
     session_start();
+    $_POST = "";
 }
 if(!isset($_SESSION["user"]) || $_SESSION["login"] == false)
 {
@@ -9,24 +10,6 @@ if(!isset($_SESSION["user"]) || $_SESSION["login"] == false)
     header("Location: login.php");
     exit;
 }
-//データベースへ接続し、接続情報を変数に保存する
-$dbname = "zaiko2021_yse";
-$host = "localhost";
-$charset = "UTF8";
-$user = "zaiko2021_yse";
-$password = "2021zaiko";
-$option = [PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION];
-
-//データベースで使用する文字コードを[UTF8]にする
-$dsn = "mysql:dbname={$dbname};host={$host};charset={$charset}";
-try{
-    $pdo = new PDO($dsn,$user,$password,$option);
-}catch(PDOException $e)
-{
-    die($e->getMessage());
-}
-
-
 
 ?>
 <!DOCTYPE html>
@@ -51,7 +34,7 @@ try{
 		</nav>
 	</div>
 
-	<form action="new_product.php" method="post"> 
+	<form action="add.php" method="post"> 
 		<div id="pagebody">
 			<!-- エラーメッセージ -->
 			<div id="error">
@@ -94,17 +77,18 @@ try{
 					// $selectedBook = getId($id,$pdo);
 					
 					?>
-					<input type="hidden" value=" <?php echo	/* ⑰ ⑯の戻り値からidを取り出し、設定する */$selectedBook["id"];?>" name="books[]">
+					<!-- <input type="hidden" value=" <?php //echo	/* ⑰ ⑯の戻り値からidを取り出し、設定する */$selectedBook["id"];?>" name="books[]"> -->
 					<tr>
-						<td><?php echo	/* ⑱ ⑯の戻り値からidを取り出し、表示する */ $selectedBook["id"];?></td>
-						<td><input type='text' name='book_name[]' size='5' maxlength='11' required></td>
-						<td><input type='text' name='author[]' size='5' maxlength='11' required></td>
-						<td><input type='text' name='salesDate[]' size='5' maxlength='11' required></td>
-						<td><input type='text' name='itemPrice[]' size='5' maxlength='11' required></td>
-						<td><input type='text' name='stock[]' size='5' maxlength='11' required></td>
-						<td><input type='text' name='in[]' size='5' maxlength='11' required></td>
+						<td><?php //echo	/* ⑱ ⑯の戻り値からidを取り出し、表示する */ $selectedBook["id"];?></td>
+						<td><input type='text' name='title' size='5' maxlength='11' required></td>
+						<td><input type='text' name='author' size='5' maxlength='11' required></td>
+						<td><input type='text' name='salesDate' size='5' maxlength='11' required></td>
+						<td><input type='text' name='itemPrice' size='5' maxlength='11' required></td>
+						<td><input type='text' name='stock' size='5' maxlength='11' required></td>
+						<td><input type='text' name='in' size='5' maxlength='11' required></td>
 					</tr>
-					<?php //endforeach ?>
+					<?php //endforeach  ?>
+                
 				</table>
 				<button type="submit" id="kakutei" formmethod="POST" name="decision" value="1">確定</button>
 			</div>
