@@ -25,10 +25,8 @@ function getByid($id,$con){
 	 */
 	
 	$id = htmlspecialchars($id);
-	$sql = "SELECT * FROM books WHERE :id = $id";
-    $statement = $con->prepare($sql);
-	$statement->execute([":id" => $id]);
-
+	$sql = "SELECT * FROM books WHERE id = {$id}";
+    $statement = $con->query($sql);
 	//③実行した結果から1レコード取得し、returnで値を返す。
 	$items = $statement->fetch(PDO::FETCH_ASSOC);
 	return $items;
@@ -170,8 +168,10 @@ if(isset($_POST["add"]) && $_POST["add"]=="ok"){
 						foreach($ids as $id){
 							//㉞「getByid」関数を呼び出し、変数に戻り値を入れる。その際引数に㉜の処理で取得した値と⑧のDBの接続情報を渡す。
 							$selectedBook = getByid($id,$pdo);
+							
 						?>
 						<tr>
+							
 							<td><?php echo	/* ㉟ ㉞で取得した書籍情報からtitleを表示する。 */$selectedBook["title"];?></td>
 							<td><?php echo	/* ㊱ ㉞で取得した書籍情報からstockを表示する。 */$selectedBook["stock"];?></td>
 							<td><?php echo	/* ㊱ POSTの「stock」に設定されている値を㉜の変数を使用して呼び出す。 */$stock = $_POST["stock"][$count]?></td>
