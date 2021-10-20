@@ -23,13 +23,24 @@ $option = [PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION];
 $dsn = "mysql:dbname={$dbname};host={$host};charset={$charset}";
 try{
     $pdo = new PDO($dsn,$user,$password,$option);
+	
 }catch(PDOException $e)
 {
     die($e->getMessage());
 }
 
-$pdo->query();
-echo $pdo->lastInsertId();
+$lastId = (int)getLastID($pdo) + 1;
+
+//get last ID from table books
+//reset auto increment ->https://befused.com/mysql/reset-auto-increment/
+
+function getLastID($pdo)
+{
+	$sql = "SELECT COUNT(id) AS count FROM books";
+	$statement = $pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
+	
+	return $statement["count"];
+}
 
 ?>
 <!DOCTYPE html>
@@ -97,17 +108,17 @@ echo $pdo->lastInsertId();
 					// $selectedBook = getId($id,$pdo);
 					
 					?>
-					<!-- <input type="hidden" value=" <?php //echo	/* ⑰ ⑯の戻り値からidを取り出し、設定する */$selectedBook["id"];?>" name="books[]"> -->
+					
 					<tr>
-						<td><?php echo $current_id;?></td>
+						<td><?php echo $lastId;?></td>
 						<td><input type='text' name='title' size='5' maxlength='11' required></td>
 						<td><input type='text' name='author' size='5' maxlength='11' required></td>
 						<td><input type='text' name='salesDate' size='5' maxlength='11' required></td>
 						<td><input type='text' name='itemPrice' size='5' maxlength='11' required></td>
 						<td><input type='text' name='stock' size='5' maxlength='11' required></td>
 						<td><input type='text' name='in' size='5' maxlength='11' required></td>
+						
 					</tr>
-					<?php //endforeach  ?>
                 
 				</table>
 				<button type="submit" id="kakutei" formmethod="POST" name="decision" value="1">確定</button>

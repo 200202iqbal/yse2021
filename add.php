@@ -7,6 +7,7 @@ if(session_status() == PHP_SESSION_NONE)
 if($_SERVER["REQUEST_METHOD"] = "POST")
 {
     $data = check($_POST);
+    
 }
 
 //データベースへ接続し、接続情報を変数に保存する
@@ -26,18 +27,27 @@ try{
     die($e->getMessage());
 }
 
-insert($pdo,$data);
+if(insert($pdo,$data))
+{
+    $_SESSION["success"] ="新商品追加が完了しました";
+    header("Location: zaiko_ichiran.php");
+    exit;
+}
 
 
 function insert($pdo,$data)
 {
-    $sql = "INSERT INTO books (title,author,salesDate,price,stock)
-            VALUES (:title,:author,:salesDate,:price,:stock)";
+    $today = date("ymd");
+    $data["isbn"] = "9784253".$today;
+
+    $sql = "INSERT INTO books (title,author,salesDate,isbn,price,stock)
+            VALUES (:title,:author,:salesDate,:isbn,:price,:stock)";
     $statement = $pdo->prepare($sql);
     $item = $statement->execute([
         ":title" => $data["title"],
         ":author" => $data["author"],
         ":salesDate" => $data["salesDate"],
+        ":isbn" => $data["isbn"],
         ":price" => $data["itemPrice"],
         ":stock" => $data["stock"],
     ]);
@@ -53,5 +63,4 @@ function check($data)
     }
     return $data;
 }
-var_dump($data);    
 ?>

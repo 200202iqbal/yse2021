@@ -48,9 +48,7 @@ try
 $sql = "SELECT * FROM books";
 
 //SQLを実行する
-$statement = $pdo->query($sql);
-
-
+$statement = $pdo->query($sql);	
 
 ?>
 <!DOCTYPE html>
