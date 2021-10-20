@@ -11,6 +11,26 @@ if(!isset($_SESSION["user"]) || $_SESSION["login"] == false)
     exit;
 }
 
+//データベースへ接続し、接続情報を変数に保存する
+$dbname = "zaiko2021_yse";
+$host = "localhost";
+$charset = "UTF8";
+$user = "zaiko2021_yse";
+$password = "2021zaiko";
+$option = [PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION];
+
+//データベースで使用する文字コードを[UTF8]にする
+$dsn = "mysql:dbname={$dbname};host={$host};charset={$charset}";
+try{
+    $pdo = new PDO($dsn,$user,$password,$option);
+}catch(PDOException $e)
+{
+    die($e->getMessage());
+}
+
+$pdo->query();
+echo $pdo->lastInsertId();
+
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -79,7 +99,7 @@ if(!isset($_SESSION["user"]) || $_SESSION["login"] == false)
 					?>
 					<!-- <input type="hidden" value=" <?php //echo	/* ⑰ ⑯の戻り値からidを取り出し、設定する */$selectedBook["id"];?>" name="books[]"> -->
 					<tr>
-						<td><?php //echo	/* ⑱ ⑯の戻り値からidを取り出し、表示する */ $selectedBook["id"];?></td>
+						<td><?php echo $current_id;?></td>
 						<td><input type='text' name='title' size='5' maxlength='11' required></td>
 						<td><input type='text' name='author' size='5' maxlength='11' required></td>
 						<td><input type='text' name='salesDate' size='5' maxlength='11' required></td>

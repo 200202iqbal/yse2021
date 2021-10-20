@@ -26,20 +26,22 @@ try{
     die($e->getMessage());
 }
 
+insert($pdo,$data);
+
 
 function insert($pdo,$data)
 {
     $sql = "INSERT INTO books (title,author,salesDate,price,stock)
             VALUES (:title,:author,:salesDate,:price,:stock)";
     $statement = $pdo->prepare($sql);
-    // $item = $statement->execute([
-    //     ":title" =>  
-    //     ":author" =>
-    //     ":salesData" =>
-    //     ":price" =>
-    //     ":stock" =>
-    // ]);
-    // return $item;
+    $item = $statement->execute([
+        ":title" => $data["title"],
+        ":author" => $data["author"],
+        ":salesDate" => $data["salesDate"],
+        ":price" => $data["itemPrice"],
+        ":stock" => $data["stock"],
+    ]);
+    return $item;
 }
 
 function check($data)
@@ -51,5 +53,5 @@ function check($data)
     }
     return $data;
 }
-var_dump($data);
+var_dump($data);    
 ?>

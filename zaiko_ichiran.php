@@ -50,6 +50,8 @@ $sql = "SELECT * FROM books";
 //SQLを実行する
 $statement = $pdo->query($sql);
 
+
+
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -136,6 +138,7 @@ $statement = $pdo->query($sql);
 							echo "<td id='stock'>".$stock."</td>";
 
 							echo "</tr>";
+							
 						}
 						?>
 					</tbody>
