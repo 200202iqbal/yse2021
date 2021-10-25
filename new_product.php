@@ -29,7 +29,20 @@ try{
     die($e->getMessage());
 }
 
-$lastId = (int)getLastID($pdo) + 1;
+// lastIdチェック
+if(isset($_SESSION["lastId"]))
+{
+	$lastId = (int)getLastID($pdo) + 1;
+	if($_SESSION["lastId"] > $lastId)
+	{
+		$lastId = $_SESSION["lastId"];
+	}
+}else
+{
+	$lastId = (int)getLastID($pdo);
+	$lastId += 1;
+}
+
 
 //get last ID from table books
 //reset auto increment ->https://befused.com/mysql/reset-auto-increment/
@@ -77,10 +90,12 @@ function getLastID($pdo)
 			//var_dump($_POST["books"]);
 			
 			
-			if(isset($_SESSION["error"])){
+			if(isset($_SESSION["errors"])){
 				//⑭SESSIONの「error」の中身を表示する。
-				echo '<p>'.$_SESSION["error"].'</p>';
-				$_SESSION["error"]="";
+				echo '<p>'.$_SESSION["errors"]["itemPrice"].'</p>';
+				echo '<p>'.$_SESSION["errors"]["stock"].'</p>';
+				echo '<p>'.$_SESSION["errors"]["in"].'</p>';
+				unset($_SESSION["errors"]);
 			}
 			?>
 			</div>

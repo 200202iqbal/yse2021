@@ -52,6 +52,7 @@ function getId($id,$con)
 // eraseById関数
 function eraseById($id,$con)
 {
+    $_SESSION["lastId"] = $id;
     $id = htmlspecialchars($id);
     $sql = "DELETE FROM books WHERE :id = id";
     $statement = $con->prepare($sql);
@@ -67,8 +68,10 @@ if(isset($_POST["delete"]) && $_POST["delete"] == "ok")
         eraseById($id,$pdo);
     }
     $_SESSION["success"] ="削除が完了しました。";
+    
     header("Location: zaiko_ichiran.php");
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="ja">

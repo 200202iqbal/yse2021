@@ -7,6 +7,13 @@ if(session_status() == PHP_SESSION_NONE)
 if($_SERVER["REQUEST_METHOD"] = "POST")
 {
     $data = check($_POST);
+    $errors = validate($data);
+    if(!empty($errors))
+    {
+        $_SESSION["errors"] = $errors;
+        header("Location: new_product.php");
+        exit;
+    }
     
 }
 
@@ -39,6 +46,7 @@ function insert($pdo,$data)
 {
     $today = date("ymd");
     $data["isbn"] = "9784253".$today;
+    $data["stock"] += $data["in"];
 
     $sql = "INSERT INTO books (title,author,salesDate,isbn,price,stock)
             VALUES (:title,:author,:salesDate,:isbn,:price,:stock)";
@@ -62,5 +70,17 @@ function check($data)
         $data[$posts] = htmlspecialchars($post, ENT_QUOTES);
     }
     return $data;
+}
+
+function validate($data)
+{
+    $errors = [];
+    if(!is_numeric($data["itemPrice"])) $errors["itemPrice"] = "金額(円) : 数値以外が入力されています";
+    if((int)$data["itemPrice"] < 0) $errors["itemPrice"] = "金額(円) : 0以上入力してください。";
+    if(!is_numeric($data["stock"])) $errors["stock"] = "在庫数 : 数値以外が入力されています";
+    if((int)$data["stock"]<0)$errors["stock"] = "在庫数 : 0以上入力してください。";
+    if(!is_numeric($data["in"])) $errors["in"] = "入荷数 : 数値以外が入力されています";
+    if((int)$data["in"]<0)$errors["in"] = "入荷数 : 0以上入力してください。";
+    return $errors;
 }
 ?>
