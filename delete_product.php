@@ -18,7 +18,6 @@ $user =  "zaiko2021_yse";
 $password = "2021zaiko";
 $option = [PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION];
 
-
 $dsn = "mysql:dbname={$dbname};host={$host};charset={$charset}";
 try
 {
@@ -29,7 +28,7 @@ try
 	die($e->getMessage());
 }
 
-
+// $_POSTをチェック
 if(empty($_POST["books"])){
 	
 	$_SESSION["success"] = "削除する商品が選択されていません";
@@ -40,7 +39,7 @@ if(empty($_POST["books"])){
 	unset($_SESSION["success"]);
 }
 
-
+// getId関数
 function getId($id,$con)
 {
     $id = htmlspecialchars($id);
@@ -48,6 +47,27 @@ function getId($id,$con)
     $statement = $con->query($sql);
     $items = $statement->fetch(PDO::FETCH_ASSOC);
     return $items;
+}
+
+// eraseById関数
+function eraseById($id,$con)
+{
+    $id = htmlspecialchars($id);
+    $sql = "DELETE FROM books WHERE :id = id";
+    $statement = $con->prepare($sql);
+    return $statement->execute([":id" => $id]);
+}
+
+if(isset($_POST["delete"]) && $_POST["delete"] == "ok")
+{
+    $ids = $_POST["books"];
+    var_dump($_SESSION["books"]);
+    foreach($ids as $id)
+    {
+        eraseById($id,$pdo);
+    }
+    $_SESSION["success"] ="削除が完了しました。";
+    header("Location: zaiko_ichiran.php");
 }
 ?>
 <!DOCTYPE html>
@@ -79,14 +99,8 @@ function getId($id,$con)
 			<div id="error">
 			<?php
 			
-			var_dump($_POST["books"]);
+			//var_dump($_POST["books"]);
 			
-			
-			if(isset($_SESSION["error"])){
-				//⑭SESSIONの「error」の中身を表示する。
-				echo '<p>'.$_SESSION["error"].'</p>';
-				$_SESSION["error"]="";
-			}
 			?>
 			</div>
 			<div id="center">
@@ -99,7 +113,6 @@ function getId($id,$con)
 							<th id="salesDate">発売日</th>
 							<th id="itemPrice">金額(円)</th>
 							<th id="stock">在庫数</th>
-							<th id="in">入荷数</th>
 						</tr>
 					</thead>
 					<?php 
@@ -113,17 +126,17 @@ function getId($id,$con)
 					?>
 					
 					<tr>
-						<td><<?php echo $selectedBook["id"] ;?></td>
-						<td><<?php echo $selectedBook["title"] ;?></td>
-						<td><input type='text' name='salesDate' size='5' maxlength='11' required></td>
-						<td><input type='text' name='itemPrice' size='5' maxlength='11' required></td>
-						<td><input type='text' name='stock' size='5' maxlength='11' required></td>
-						<td><input type='text' name='in' size='5' maxlength='11' required></td>
-						
+						<td><?php echo $selectedBook["id"] ;?></td>
+						<td><?php echo $selectedBook["title"] ;?></td>
+						<td><?php echo $selectedBook["author"] ;?></td>
+						<td><?php echo $selectedBook["salesDate"] ;?></td>
+						<td><?php echo $selectedBook["price"] ;?></td>
+						<td><?php echo $selectedBook["stock"] ;?></td>
+						<input type="hidden" name="books[]" value=" <?php echo $selectedBook["id"];?>">
 					</tr>
                     <?php endforeach ?>
 				</table>
-				<button type="submit" id="kakutei" formmethod="POST" name="decision" value="1">確定</button>
+				<button type="submit" id="kakutei" formmethod="POST" name="delete" value="ok">確定</button>
 			</div>
 		</div>
 	</form>
