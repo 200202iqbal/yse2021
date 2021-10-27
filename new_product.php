@@ -30,18 +30,9 @@ try{
 }
 
 // lastIdチェック
-if(isset($_SESSION["lastId"]))
-{
-	$lastId = (int)getLastID($pdo) + 1;
-	if($_SESSION["lastId"] > $lastId)
-	{
-		$lastId = $_SESSION["lastId"];
-	}
-}else
-{
-	$lastId = (int)getLastID($pdo);
-	$lastId += 1;
-}
+$lastId = (int)getLastID($pdo);
+$lastId += 1;
+
 
 
 //get last ID from table books
@@ -49,10 +40,10 @@ if(isset($_SESSION["lastId"]))
 
 function getLastID($pdo)
 {
-	$sql = "SELECT COUNT(id) AS count FROM books";
-	$statement = $pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
+	$sql = "SELECT MAX(id) AS max_id FROM books";
+	$row = $pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
 	
-	return $statement["count"];
+	return $row["max_id"];
 }
 
 ?>
@@ -77,28 +68,24 @@ function getLastID($pdo)
 			</ul>
 		</nav>
 	</div>
+	<!-- メニュー終わり -->
 
 	<form action="add.php" method="post"> 
 		<div id="pagebody">
 			<!-- エラーメッセージ -->
 			<div id="error">
-			<?php
-			/*
-			 * ⑬SESSIONの「error」にメッセージが設定されているかを判定する。
-			 * 設定されていた場合はif文の中に入る。
-			 */ 
-			//var_dump($_POST["books"]);
-			
-			
+			<?php				
 			if(isset($_SESSION["errors"])){
-				//⑭SESSIONの「error」の中身を表示する。
-				echo '<p>'.$_SESSION["errors"]["itemPrice"].'</p>';
-				echo '<p>'.$_SESSION["errors"]["stock"].'</p>';
-				echo '<p>'.$_SESSION["errors"]["in"].'</p>';
+				echo '<p>'.@$_SESSION["errors"]["itemPrice"].'</p>';
+				echo '<p>'.@$_SESSION["errors"]["stock"].'</p>';
+				echo '<p>'.@$_SESSION["errors"]["in"].'</p>';
+				echo '<p>'.@$_SESSION["errors"]["isbn"].'</p>';
 				unset($_SESSION["errors"]);
-			}
-			?>
+			}?>
 			</div>
+			<!-- エラーメッセージ終わり -->
+
+			<!-- 一覧セクション -->
 			<div id="center">
 				<table>
 					<thead>
@@ -107,37 +94,26 @@ function getLastID($pdo)
 							<th id="book_name">書籍名</th>
 							<th id="author">著者名</th>
 							<th id="salesDate">発売日</th>
+							<th id="isbn">ISBN</th>
 							<th id="itemPrice">金額(円)</th>
 							<th id="stock">在庫数</th>
 							<th id="in">入荷数</th>
 						</tr>
 					</thead>
-					<?php 
-					// /*
-					//  * ⑮POSTの「books」から一つずつ値を取り出し、変数に保存する。
-					//  */
-					// $ids = $_POST["books"];
-					//var_dump($_POST["books"]);
-    				//  foreach($ids as $id):
-    				// ⑯「getId」関数を呼び出し、変数に戻り値を入れる。その際引数に⑮の処理で取得した値と⑥のDBの接続情報を渡す。	
-					// $selectedBook = getId($id,$pdo);
-					
-					?>
-					
 					<tr>
 						<td><?php echo $lastId;?></td>
 						<td><input type='text' name='title' size='5' maxlength='11' required></td>
 						<td><input type='text' name='author' size='5' maxlength='11' required></td>
 						<td><input type='text' name='salesDate' size='5' maxlength='11' required></td>
+						<td><input type='text' name='isbn' size='13' maxlength='15' required></td>
 						<td><input type='text' name='itemPrice' size='5' maxlength='11' required></td>
 						<td><input type='text' name='stock' size='5' maxlength='11' required></td>
 						<td><input type='text' name='in' size='5' maxlength='11' required></td>
-						
 					</tr>
-                
 				</table>
 				<button type="submit" id="kakutei" formmethod="POST" name="decision" value="1">確定</button>
 			</div>
+			<!-- 一覧セクション終わり -->
 		</div>
 	</form>
 	<!-- フッター -->
