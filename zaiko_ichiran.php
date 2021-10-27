@@ -50,6 +50,50 @@ $sql = "SELECT * FROM books";
 //SQLを実行する
 $statement = $pdo->query($sql);	
 
+function listCount($pdo) {
+    $sql = "SELECT count(id) AS count FROM books;";
+    $row = $pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
+    return $row['count'];
+}
+
+//Pagination
+function paginate($count,$current_page,$limit = 15,$per_count = 10)
+{
+	$page_count = ceil($count/$limit);
+	$page_start = $current_page;
+	$page_end = $page_start + $per_count -1;
+	if($page_end>$page_count)
+	{
+		$page_end = $page_count;
+		$page_start = $page_end - $per_count + 1;
+	}
+	if($page_start<0) $page_start = 1;
+
+	$page_prev = ($current_page <=1) ? 1:$current_page -1;
+	$page_next = ($current_page<$page_count) ? $current_page+1 :$page_count;
+
+	$pages = range($page_start,$page_end);
+
+	$paginate = compact(
+		"page_count",
+		"page_start",
+		"page_end",
+		"page_prev",
+		"page_next",
+		"pages",
+	);
+	return $paginate;
+}
+
+$current_page = (isset($_GET["page"])) ? $_GET["page"] : 1;
+
+$count = listCount($pdo);
+$limit = 15;
+$offset = ($current_page - 1) * $limit;
+
+$paginate = paginate($count,$current_page,$limit,5);
+extract($paginate);
+
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -134,9 +178,7 @@ $statement = $pdo->query($sql);
 							echo "<td id='date'>".$date."</td>";
 							echo "<td id='price'>".$price."</td>";
 							echo "<td id='stock'>".$stock."</td>";
-
 							echo "</tr>";
-							
 						}
 						?>
 					</tbody>
@@ -144,6 +186,25 @@ $statement = $pdo->query($sql);
 			</div>
 		</div>
 	</form>
+	<!-- Paginateコード始まり -->
+	<nav aria-label="Page navigation">
+		<ul class="pagination">
+				<!-- &laquo; is an HTML character code for a "left-angle quote," otherwise known as the symbol «. -->
+			<li class="page-item"><a href="#" class="page-link">&laquo;</a></li>
+			<li class="page-item"><a href="#" class="page-link">Prev</a></li>
+
+			<?php foreach($pages as $page): ?>
+				<?php if ($current_page == $page):?>
+					<li class="page-item active"><a href="#" class="page-link"></a></li>
+				<?php else: ?>
+					<li class="page-item"><a href="#" class="page-link"></a></li>
+				<?php endif ?>
+			<?php endforeach ?>
+			<li class="page-item"><a href="" class="page-link">Next</a></li>
+			<li class="page-item"><a href="" class="page-link">&raquo;</a></li>	
+		</ul>
+	</nav>
+	<!-- Paginateコード終わり -->
 	<div id="footer">
 		<footer>株式会社アクロイト</footer>
 	</div>
