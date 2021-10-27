@@ -31,6 +31,7 @@ if ( !isset($_SESSION["user"]) ||$_SESSION["login"]==false){
 	exit;
 }
 
+
 //⑥データベースへ接続し、接続情報を変数に保存する
 $dbname = "zaiko2021_yse";
 $host = "localhost";
@@ -62,6 +63,8 @@ if(empty($_POST["books"])){
 {
 	unset($_SESSION["success"]);
 }
+
+
 //var_dump($_POST);
 function getId($id,$con){
 	/* 
@@ -151,7 +154,7 @@ function getId($id,$con){
 						<td><?php echo	/* ㉑ ⑯の戻り値からsalesDateを取り出し、表示する */$selectedBook["salesDate"];?></td>
 						<td><?php echo	/* ㉒ ⑯の戻り値からpriceを取り出し、表示する */$selectedBook["price"];?></td>
 						<td><?php echo	/* ㉓ ⑯の戻り値からstockを取り出し、表示する */$selectedBook["stock"];?></td>
-						<td><input type='text' name='stock[]' size='5' maxlength='11' required></td>
+						<td><input type='text' name='stock[]' size='5' maxlength='11'></td>
 					</tr>
 					<?php endforeach ?>
 				</table>
