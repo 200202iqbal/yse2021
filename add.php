@@ -33,6 +33,7 @@ try{
 {
     die($e->getMessage());
 }
+// データベースの接続処理が終わり//
 
 if(insert($pdo,$data))
 {
@@ -44,9 +45,10 @@ if(insert($pdo,$data))
 
 function insert($pdo,$data)
 {
-    $today = date("ymd");
-    $data["isbn"] = "9784253".$today;
-    $data["stock"] += $data["in"];
+    //isbn番号を自動で作る
+    // $today = date("ymd");
+    // $data["isbn"] = "9784253".$today;
+    // $data["stock"] += $data["in"];
 
     $sql = "INSERT INTO books (title,author,salesDate,isbn,price,stock)
             VALUES (:title,:author,:salesDate,:isbn,:price,:stock)";
@@ -77,10 +79,14 @@ function validate($data)
     $errors = [];
     if(!is_numeric($data["itemPrice"])) $errors["itemPrice"] = "金額(円) : 数値以外が入力されています";
     if((int)$data["itemPrice"] < 0) $errors["itemPrice"] = "金額(円) : 0以上入力してください。";
+    
     if(!is_numeric($data["stock"])) $errors["stock"] = "在庫数 : 数値以外が入力されています";
     if((int)$data["stock"]<0)$errors["stock"] = "在庫数 : 0以上入力してください。";
+    
     if(!is_numeric($data["in"])) $errors["in"] = "入荷数 : 数値以外が入力されています";
     if((int)$data["in"]<0)$errors["in"] = "入荷数 : 0以上入力してください。";
+    
+    if(!is_numeric($data["isbn"])) $errors["isbn"] = "isbn : 数値以外が入力されています";
     return $errors;
 }
 ?>
