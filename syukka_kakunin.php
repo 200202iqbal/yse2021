@@ -21,6 +21,16 @@ if ( !isset($_SESSION["user"]) ||$_SESSION["login"]==false){
 	exit;
 }
 
+if(empty($_POST["books"])){
+	//⑨SESSIONの「success」に「入荷する商品が選択されていません」と設定する。
+	$_SESSION["success"] = "出荷する商品が選択されていません";
+	//⑩在庫一覧画面へ遷移する。
+	header("Location: zaiko_ichiran.php");
+}else
+{
+	unset($_SESSION["success"]);
+}
+
 function getByid($id,$con){
 	/* 
 	 * ②書籍を取得するSQLを作成する実行する。

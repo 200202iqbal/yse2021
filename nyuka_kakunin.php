@@ -17,6 +17,16 @@ if ( !isset($_SESSION["user"]) ||$_SESSION["login"]==false){
 	header("Location: login.php");
 	exit;
 }
+if(empty($_POST["books"])){
+	//⑨SESSIONの「success」に「入荷する商品が選択されていません」と設定する。
+	$_SESSION["success"] = "入荷する商品が選択されていません";
+	//⑩在庫一覧画面へ遷移する。
+	header("Location: zaiko_ichiran.php");
+}else
+{
+	unset($_SESSION["success"]);
+}
+
 function getByid($id,$con){
 	/* 
 	 * ②書籍を取得するSQLを作成する実行する。
@@ -83,6 +93,16 @@ $ids = $_POST["books"];
 // 	 * 半角数字以外の文字が設定されていないかを「is_numeric」関数を使用して確認する。
 // 	 * 半角数字以外の文字が入っていた場合はif文の中に入る。
 // 	 */
+
+	//入荷数をチェック
+	if(empty($_POST["stock"][$count]))
+	{
+		$_SESSION["error"]="入荷数を入力してください";
+		include("nyuka.php");
+		exit;
+	}
+
+	//入荷数は数字で入れるのかチェックする
 	if (!is_numeric($_POST["stock"][$count])) {
 		//⑬SESSIONの「error」に「数値以外が入力されています」と設定する。
 		$_SESSION["error"]="数値以外が入力されています";
@@ -91,6 +111,7 @@ $ids = $_POST["books"];
 		//⑮「exit」関数で処理を終了する。
 		exit;
 	}
+	
 
 	//⑯「getByid」関数を呼び出し、変数に戻り値を入れる。その際引数に⑪の処理で取得した値と⑧のDBの接続情報を渡す。
 	$selectedBook = getByid($id,$pdo);
