@@ -45,21 +45,22 @@ try
 	die($e->getMessage());
 }
 //SQL
-$sql = "SELECT * FROM books";
+$sql = "SELECT * FROM books LIMIT 10 OFFSET 0";
 
 //SQLを実行する
 $statement = $pdo->query($sql);	
 
 function listCount($pdo) {
-    $sql = "SELECT count(id) AS count FROM books;";
+    $sql = "SELECT count(id) AS count FROM books";
     $row = $pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
     return $row['count'];
 }
 
 //Pagination
-function paginate($count,$current_page,$limit = 15,$per_count = 10)
+function paginate($count,$current_page,$limit = 10,$per_count = 10)
 {
 	$page_count = ceil($count/$limit);
+	//echo "$page_count";
 	$page_start = $current_page;
 	$page_end = $page_start + $per_count -1;
 	if($page_end>$page_count)
@@ -70,7 +71,7 @@ function paginate($count,$current_page,$limit = 15,$per_count = 10)
 	if($page_start<0) $page_start = 1;
 
 	$page_prev = ($current_page <=1) ? 1:$current_page -1;
-	$page_next = ($current_page<$page_count) ? $current_page+1 :$page_count;
+	$page_next = ($current_page<$page_count) ? $current_page+1 : $page_count;
 
 	$pages = range($page_start,$page_end);
 
@@ -88,7 +89,7 @@ function paginate($count,$current_page,$limit = 15,$per_count = 10)
 $current_page = (isset($_GET["page"])) ? $_GET["page"] : 1;
 
 $count = listCount($pdo);
-$limit = 15;
+$limit = 10;
 $offset = ($current_page - 1) * $limit;
 
 $paginate = paginate($count,$current_page,$limit,5);
@@ -101,6 +102,7 @@ extract($paginate);
 	<meta charset="UTF-8">
 	<title>書籍一覧</title>
 	<link rel="stylesheet" href="css/ichiran.css" type="text/css" />
+	
 </head>
 <body>
 	<div id="header">
@@ -189,19 +191,18 @@ extract($paginate);
 	<!-- Paginateコード始まり -->
 	<nav aria-label="Page navigation">
 		<ul class="pagination">
-				<!-- &laquo; is an HTML character code for a "left-angle quote," otherwise known as the symbol «. -->
-			<li class="page-item"><a href="#" class="page-link">&laquo;</a></li>
-			<li class="page-item"><a href="#" class="page-link">Prev</a></li>
+			<li class="page-item"><a href="?page=1" class="page-link"><<</a></li>
+			<li class="page-item"><a href="?page=<?=$page_prev?>" class="page-link">Prev</a></li>
 
 			<?php foreach($pages as $page): ?>
 				<?php if ($current_page == $page):?>
-					<li class="page-item active"><a href="#" class="page-link"></a></li>
+					<li class="page-item"><a href="?page=<?=$page?>" class="page-link"><?=$page?></a></li>
 				<?php else: ?>
-					<li class="page-item"><a href="#" class="page-link"></a></li>
+					<li class="page-item"><a href="?page=<?= $page?>" class="page-link"><?=$page?></a></li>
 				<?php endif ?>
 			<?php endforeach ?>
-			<li class="page-item"><a href="" class="page-link">Next</a></li>
-			<li class="page-item"><a href="" class="page-link">&raquo;</a></li>	
+			<li class="page-item"><a href="?page=<?=$page_next?>" class="page-link">Next</a></li>
+			<li class="page-item"><a href="?page=<?=$page_count?>" class="page-link">>></a></li>	
 		</ul>
 	</nav>
 	<!-- Paginateコード終わり -->
