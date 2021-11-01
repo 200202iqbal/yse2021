@@ -95,7 +95,7 @@ function listCount($pdo) {
 }
 
 //Pagination
-function paginate($count,$current_page,$limit = 10,$per_count = 10)
+function paginate($count,$current_page,$limit = 15,$per_count = 10)
 {
 	$page_count = ceil($count/$limit);
 	$page_start = $current_page;
@@ -126,7 +126,7 @@ function paginate($count,$current_page,$limit = 10,$per_count = 10)
 $current_page = (isset($_GET["p"])) ? $_GET["p"] : 1;
 
 $count = listCount($pdo);
-$limit = 10;
+$limit = 15;
 $offset = ($current_page - 1) * $limit;
 
 
@@ -251,7 +251,6 @@ $statement = $pdo->query($sql);
 							);
 							extract($book);
 							$books[] = $book;
-							var_dump($books);
 
 							echo "<tr id='book'>";
 							echo "<td id='check'><input type='checkbox' name='books[]' value=".$books["id"]."></td>";
@@ -278,13 +277,13 @@ $statement = $pdo->query($sql);
 
 			<?php foreach($pages as $page): ?>
 				<?php if ($current_page == $page):?>
-					<li><a href="?page=<?=$page?>"><?=$page?></a></li>
+					<li><a href="?p=<?=$page?>"><?=$page?></a></li>
 				<?php else: ?>
-					<li><a href="?page=<?=$page?>"><?=$page?></a></li>
+					<li><a href="?p=<?=$page?>"><?=$page?></a></li>
 				<?php endif ?>
 			<?php endforeach ?>
-			<li><a href="?page=<?=$page_prev?>">Next</a></li>
-			<li><a href="?page=<?=$page_count?>">>></a></li>	
+			<li><a href="?p=<?=$page_next?>">Next</a></li>
+			<li><a href="?p=<?=$page_count?>">>></a></li>	
 		</ul>
 	</nav>
 	<!-- Paginateコード終わり -->
