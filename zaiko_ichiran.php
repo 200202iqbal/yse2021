@@ -47,46 +47,6 @@ try
 	die($e->getMessage());
 }
 
-if(isset($_GET["sortSalesDate"]))
-{
-	if($_GET["sortSalesDate"] == "ASC") 
-	{
-		$order = $_GET["sortSalesDate"];
-		$sql = "SELECT * FROM books ORDER BY salesDate {$order}";
-	}
-	if($_GET["sortSalesDate"] == "DESC") 
-	{
-		$order = $_GET["sortSalesDate"];
-		$sql = "SELECT * FROM books ORDER BY salesDate {$order}";
-	}	
-}
-if(isset($_GET["sortPrice"]))
-{
-	if($_GET["sortPrice"] == "ASC") 
-	{
-		$order = $_GET["sortPrice"];
-		$sql = "SELECT * FROM books ORDER BY price {$order}";
-	}
-	if($_GET["sortPrice"] == "DESC") 
-	{
-		$order = $_GET["sortPrice"];
-		$sql = "SELECT * FROM books ORDER BY price {$order}";
-	}
-}
-if(isset($_GET["sortStock"]))
-{
-	if($_GET["sortStock"] == "ASC") 
-	{
-		$order = $_GET["sortStock"];
-		$sql = "SELECT * FROM books ORDER BY stock {$order}";
-	}
-	if($_GET["sortStock"] == "DESC") 
-	{
-		$order = $_GET["sortStock"];
-		$sql = "SELECT * FROM books ORDER BY stock {$order}";
-	}
-}
-
 
 function listCount($pdo) {
     $sql = "SELECT count(id) AS count FROM books;";
@@ -133,10 +93,72 @@ $offset = ($current_page - 1) * $limit;
 $paginate = paginate($count,$current_page,$limit,5);
 extract($paginate);
 
+
 //SQL
 $sql = "SELECT * FROM books LIMIT {$limit} OFFSET {$offset}";
 //SQLを実行する
 $statement = $pdo->query($sql);	
+
+if(isset($_GET["sortSalesDate"]))
+{
+	if($_GET["sortSalesDate"] == "ASC") 
+	{
+		$order = $_GET["sortSalesDate"];
+		$sql = "SELECT * FROM books ORDER BY salesDate {$order}";
+		$pageOrder = "&sortSalesDate=ASC";
+	}
+	if($_GET["sortSalesDate"] == "DESC") 
+	{
+		$order = $_GET["sortSalesDate"];
+		$sql = "SELECT * FROM books ORDER BY salesDate {$order}";
+		$pageOrder = "&sortSalesDate=DESC";
+	}	
+	//SQL
+	$sql .= " LIMIT {$limit} OFFSET {$offset}";
+	//SQLを実行する
+	$statement = $pdo->query($sql);
+
+}
+if(isset($_GET["sortPrice"]))
+{
+	if($_GET["sortPrice"] == "ASC") 
+	{
+		$order = $_GET["sortPrice"];
+		$sql = "SELECT * FROM books ORDER BY price {$order}";
+		$pageOrder = "&sortPrice=ASC";
+	}
+	if($_GET["sortPrice"] == "DESC") 
+	{
+		$order = $_GET["sortPrice"];
+		$sql = "SELECT * FROM books ORDER BY price {$order}";
+		$pageOrder = "&sortPrice=DESC";
+	}
+	//SQL
+	$sql .= " LIMIT {$limit} OFFSET {$offset}";
+	//SQLを実行する
+	$statement = $pdo->query($sql);
+}
+if(isset($_GET["sortStock"]))
+{
+	if($_GET["sortStock"] == "ASC") 
+	{
+		$order = $_GET["sortStock"];
+		$sql = "SELECT * FROM books ORDER BY stock {$order}";
+		$pageOrder = "&sortStock=ASC";
+	}
+	if($_GET["sortStock"] == "DESC") 
+	{
+		$order = $_GET["sortStock"];
+		$sql = "SELECT * FROM books ORDER BY stock {$order}";
+		$pageOrder = "&sortStock=DESC";
+	}
+	//SQL
+	$sql .= " LIMIT {$limit} OFFSET {$offset}";
+	//SQLを実行する
+	$statement = $pdo->query($sql);
+}
+	
+
 
 ?>
 <!DOCTYPE html>
@@ -218,26 +240,7 @@ $statement = $pdo->query($sql);
 						<?php
 						
 						
-						if(isset($_POST["sortSalesDate"]))
-						{
-							
-							$statement = $_POST["sortSalesDate"];
-							$books = $statement->fetch(PDO::FETCH_ASSOC);
-						}
-						if(isset($_POST["sortItemPrice"]))
-						{
-							
-							$statement = $_POST["sortItemPrice"];
-							$books = $statement->fetch(PDO::FETCH_ASSOC);
-						}
-						if(isset($_POST["sortStocks"]))
-						{
-							
-							$statement = $_POST["sortStocks"];
-							$books = $statement->fetch(PDO::FETCH_ASSOC);
-						}
 						
-						$books = [];
 						//⑩SQLの実行結果の変数から1レコードのデータを取り出す。レコードがない場合はループを終了する。
 						while($books = $statement->fetch(PDO::FETCH_ASSOC)){
 							//⑪extract変数を使用し、1レコードのデータを渡す。
@@ -251,7 +254,7 @@ $statement = $pdo->query($sql);
 								"stock" => $books["stock"]
 							);
 							extract($book);
-							$books[] = $book;
+							//$books[] = $book;
 
 							echo "<tr id='book'>";
 							echo "<td id='check'><input type='checkbox' name='books[]' value=".$books["id"]."></td>";
@@ -274,18 +277,18 @@ $statement = $pdo->query($sql);
 	<nav aria-label="page">
 		<ul class="pagination">
 				<!-- &laquo; is an HTML character code for a "left-angle quote," otherwise known as the symbol «. -->
-			<li><a href="?p=1"><<</a></li>
-			<li><a href="?p=<?= $page_prev?>">Prev</a></li>
+			<li><a href="?p=1<?=@$pageOrder?>"><<</a></li>
+			<li><a href="?p=<?= $page_prev.@$pageOrder?>">Prev</a></li>
 
 			<?php foreach($pages as $page): ?>
 				<?php if ($current_page == $page):?>
-					<li><a href="?p=<?=$page?>"><?=$page?></a></li>
+					<li><a href="?p=<?=$page.@$pageOrder?>"><?=$page?></a></li>
 				<?php else: ?>
-					<li><a href="?p=<?=$page?>"><?=$page?></a></li>
+					<li><a href="?p=<?=$page.@$pageOrder?>"><?=$page?></a></li>
 				<?php endif ?>
 			<?php endforeach ?>
-			<li><a href="?p=<?=$page_next?>">Next</a></li>
-			<li><a href="?p=<?=$page_count?>">>></a></li>	
+			<li><a href="?p=<?=$page_next.@$pageOrder?>">Next</a></li>
+			<li><a href="?p=<?=$page_count.@$pageOrder?>">>></a></li>	
 		</ul>
 	</nav>
 	<!-- Paginateコード終わり -->
