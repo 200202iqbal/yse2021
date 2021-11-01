@@ -102,7 +102,7 @@ extract($paginate);
 <head>
 	<meta charset="UTF-8">
 	<title>書籍一覧</title>
-	<link rel="stylesheet" href="css/ichiran.css" type="text/css" />
+	<link rel="stylesheet" href="css/ichiran.css" type="text/css">
 	
 </head>
 
@@ -248,6 +248,6 @@ extract($paginate);
 	<div id="footer">
 		<footer>株式会社アクロイト</footer>
 	</div>
-	<script src="sort.js"></script>
+	
 </body>
 </html>

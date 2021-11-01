@@ -13,7 +13,7 @@ body{
 	color:#404040;
 }
 
-#pagebody{
+#body{
 	width:1400px;
 	margin: auto;
 	background-color: #ffffff;
@@ -158,7 +158,7 @@ th{
 	font-size: 20px;
 	background:#7fffbf;
 	border:2px #404040 solid;
-	padding:10px;
+	padding:8px;
 }
 
 th button{
@@ -172,22 +172,23 @@ th button{
 
 .sort{
 	background:#7fffbf;
-	margin-left:0px;
-	margin-right:0px;
-	width:30px;
-	height:25px;
-	border:none;
-	
+    margin-left:0px;
+    margin-right:0px;
+    width:30px;
+    height:25px;
+    border:none;
 }
 
-.sort:hover{
-	background:#22f18a;
-}
-
-#check 
+.sort:hover
 {
-	width:50px;
+	background-color:#22f18a;
 }
+
+#check
+{
+    width:50px;
+}
+
 #salesDate,#itemPrice,#stock
 {
 	width: 140px;
@@ -469,6 +470,13 @@ tr #tuika{
 #message:active{
 	top: 3px;
 	box-shadow: none;
+}
+
+.page-link
+{
+	color:#404040;
+	text-align:center;
+	padding:10px;
 }
 
 #footer{
