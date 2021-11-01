@@ -154,7 +154,7 @@ function getId($id,$con){
 						<td><?php echo	/* ㉑ ⑯の戻り値からsalesDateを取り出し、表示する */$selectedBook["salesDate"];?></td>
 						<td><?php echo	/* ㉒ ⑯の戻り値からpriceを取り出し、表示する */$selectedBook["price"];?></td>
 						<td><?php echo	/* ㉓ ⑯の戻り値からstockを取り出し、表示する */$selectedBook["stock"];?></td>
-						<td><input type='text' name='stock[]' size='5' maxlength='11'></td>
+						<td><input type='text' name='stock[]' size='5' maxlength='11' required></td>
 					</tr>
 					<?php endforeach ?>
 				</table>

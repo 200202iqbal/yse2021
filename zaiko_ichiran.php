@@ -263,6 +263,7 @@ $statement = $pdo->query($sql);
 							echo "<td id='stock'>".$stock."</td>";
 							echo "</tr>";
 						}
+						
 						?>
 					</tbody>
 				</table>
