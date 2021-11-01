@@ -46,11 +46,47 @@ try
 {
 	die($e->getMessage());
 }
-//SQL
-$sql = "SELECT * FROM books";
 
-//SQLを実行する
-$statement = $pdo->query($sql);	
+if(isset($_GET["sortSalesDate"]))
+{
+	if($_GET["sortSalesDate"] == "ASC") 
+	{
+		$order = $_GET["sortSalesDate"];
+		$sql = "SELECT * FROM books ORDER BY salesDate {$order}";
+	}
+	if($_GET["sortSalesDate"] == "DESC") 
+	{
+		$order = $_GET["sortSalesDate"];
+		$sql = "SELECT * FROM books ORDER BY salesDate {$order}";
+	}	
+}
+if(isset($_GET["sortPrice"]))
+{
+	if($_GET["sortPrice"] == "ASC") 
+	{
+		$order = $_GET["sortPrice"];
+		$sql = "SELECT * FROM books ORDER BY price {$order}";
+	}
+	if($_GET["sortPrice"] == "DESC") 
+	{
+		$order = $_GET["sortPrice"];
+		$sql = "SELECT * FROM books ORDER BY price {$order}";
+	}
+}
+if(isset($_GET["sortStock"]))
+{
+	if($_GET["sortStock"] == "ASC") 
+	{
+		$order = $_GET["sortStock"];
+		$sql = "SELECT * FROM books ORDER BY stock {$order}";
+	}
+	if($_GET["sortStock"] == "DESC") 
+	{
+		$order = $_GET["sortStock"];
+		$sql = "SELECT * FROM books ORDER BY stock {$order}";
+	}
+}
+
 
 function listCount($pdo) {
     $sql = "SELECT count(id) AS count FROM books;";
@@ -59,7 +95,7 @@ function listCount($pdo) {
 }
 
 //Pagination
-function paginate($count,$current_page,$limit = 15,$per_count = 10)
+function paginate($count,$current_page,$limit = 10,$per_count = 10)
 {
 	$page_count = ceil($count/$limit);
 	$page_start = $current_page;
@@ -87,14 +123,20 @@ function paginate($count,$current_page,$limit = 15,$per_count = 10)
 	return $paginate;
 }
 
-$current_page = (isset($_GET["page"])) ? $_GET["page"] : 1;
+$current_page = (isset($_GET["p"])) ? $_GET["p"] : 1;
 
 $count = listCount($pdo);
-$limit = 15;
+$limit = 10;
 $offset = ($current_page - 1) * $limit;
+
 
 $paginate = paginate($count,$current_page,$limit,5);
 extract($paginate);
+
+//SQL
+$sql = "SELECT * FROM books LIMIT {$limit} OFFSET {$offset}";
+//SQLを実行する
+$statement = $pdo->query($sql);	
 
 ?>
 <!DOCTYPE html>
@@ -108,7 +150,7 @@ extract($paginate);
 
 <body>
 	<div id="header">
-		<h1>書籍一覧</h1>
+		<h1><a class="home-link" href="zaiko_ichiran.php">書籍一覧</a></h1>
 	</div>
 	<form action="zaiko_ichiran.php" method="post" id="myform" name="myform">
 		<div id="pagebody">
@@ -156,21 +198,18 @@ extract($paginate);
 							<th id="author">著者名</th>
 							<th id="salesDate">
 								発売日
-								<button id="sortSalesDate" class="sort" name="sortSales" value="ASC" formaction="sort.php">&#9650;</button>
-								<!-- geometric shape code html &#9650 &#9660  -->
-								<button id="sortSalesDate" class="sort" name="sortSales" value="DESC" formaction="sort.php">&#9660;</button>
+								<a class="sort-link" title="Sort Ascending" href="?sortSalesDate=ASC">&#9650;</a>
+								<a class="sort-link"  title="Sort Descending" href="?sortSalesDate=DESC">&#9660;</a>
 							</th>
 							<th id="itemPrice">
 								金額
-								<button id="sortSalesDate" class="sort" name="sortPrice" value="ASC" formaction="sort.php">&#9650;</button>
-								<!-- geometric shape code html &#9650 &#9660  -->
-								<button id="sortSalesDate" class="sort" name="sortPrice" value="DESC" formaction="sort.php">&#9660;</button>
+								<a class="sort-link" title="Sort Ascending" href="?sortPrice=ASC">&#9650;</a>
+								<a class="sort-link"  title="Sort Descending" href="?sortPrice=DESC">&#9660;</a>
 							</th>
 							<th id="stock">
 								在庫数
-								<button id="sortSalesDate" class="sort" name="sortStock" value="ASC" formaction="sort.php">&#9650;</button>
-								<!-- geometric shape code html &#9650 &#9660  -->
-								<button id="sortSalesDate" class="sort" name="sortStock" value="DESC" formaction="sort.php">&#9660;</button>
+								<a class="sort-link" title="Sort Ascending" href="?sortStock=ASC">&#9650;</a>
+								<a class="sort-link"  title="Sort Descending" href="?sortStock=DESC">&#9660;</a>
 							</th>
 						</tr>
 					</thead>
@@ -197,9 +236,11 @@ extract($paginate);
 							$books = $statement->fetch(PDO::FETCH_ASSOC);
 						}
 						
+						$books = [];
 						//⑩SQLの実行結果の変数から1レコードのデータを取り出す。レコードがない場合はループを終了する。
 						while($books = $statement->fetch(PDO::FETCH_ASSOC)){
 							//⑪extract変数を使用し、1レコードのデータを渡す。
+							
 							$book = array(
 								"id" => $books["id"],
 								"title" => $books["title"],
@@ -209,6 +250,8 @@ extract($paginate);
 								"stock" => $books["stock"]
 							);
 							extract($book);
+							$books[] = $book;
+							var_dump($books);
 
 							echo "<tr id='book'>";
 							echo "<td id='check'><input type='checkbox' name='books[]' value=".$books["id"]."></td>";
@@ -227,21 +270,21 @@ extract($paginate);
 		</div>
 	</form>
 	<!-- Paginateコード始まり -->
-	<nav aria-label="Page navigation">
+	<nav aria-label="page">
 		<ul class="pagination">
 				<!-- &laquo; is an HTML character code for a "left-angle quote," otherwise known as the symbol «. -->
-			<li class="page-item"><a href="#" class="page-link">&laquo;</a></li>
-			<li class="page-item"><a href="#" class="page-link">Prev</a></li>
+			<li><a href="?p=1"><<</a></li>
+			<li><a href="?p=<?= $page_prev?>">Prev</a></li>
 
 			<?php foreach($pages as $page): ?>
 				<?php if ($current_page == $page):?>
-					<li class="page-item active"><a href="#" class="page-link"></a></li>
+					<li><a href="?page=<?=$page?>"><?=$page?></a></li>
 				<?php else: ?>
-					<li class="page-item"><a href="#" class="page-link"></a></li>
+					<li><a href="?page=<?=$page?>"><?=$page?></a></li>
 				<?php endif ?>
 			<?php endforeach ?>
-			<li class="page-item"><a href="" class="page-link">Next</a></li>
-			<li class="page-item"><a href="" class="page-link">&raquo;</a></li>	
+			<li><a href="?page=<?=$page_prev?>">Next</a></li>
+			<li><a href="?page=<?=$page_count?>">>></a></li>	
 		</ul>
 	</nav>
 	<!-- Paginateコード終わり -->

@@ -35,9 +35,8 @@ if (isset($_POST['decision']) && $_POST['decision'] == 1) {
 	
 	
 }else{
-	$msg = "ログインしてください。";
-}
-}
+	$error_message[1] = "名前が未入力です。";
+}}
 
 	
 	// if (/* ③の処理を書く */) {
@@ -58,7 +57,7 @@ if (isset($_POST['decision']) && $_POST['decision'] == 1) {
 		header("Location: zaiko_ichiran.php");
 	}
 	else{
-		$msg = "ユーザー名かパスワードがまちがっています。";
+		$error_message[2] = "ユーザー名かパスワードがまちがっています。";
 	}
 }
 // 	//⑧名前に「yse」、パスワードに「2021」と設定されているか確認する。設定されていた場合はif文の中に入る
@@ -77,7 +76,7 @@ if (isset($_POST['decision']) && $_POST['decision'] == 1) {
 // 	//⑭SESSIONの「error2」にnullを入れる。
 // }
 if(isset($_SESSION['error2'])){
-	$errormsg = $_SESSION['error2'];
+	$error_message[3] = $_SESSION['error2'];
 	$_SESSION['error2'] = null;
 }
 ?>
@@ -92,11 +91,14 @@ if(isset($_SESSION['error2'])){
 	<div id="main">
 		<h1>ログイン</h1>
 		<?php 
-		//⑮エラーメッセージの変数に入っている値を表示する 
-		echo "<div id='error'>",$errormsg , "</div>";
+		if(!empty($error_message))
+		{
+			if(!empty($error_message[1])) $error = $error_message[1] ;
+			if(!empty($error_message[2])) $error = $error_message[2];
+			if(!empty($error_message[3])) $error = $error_message[3];
+			echo "<div id='error'>".@$error."</div>";
+		}
 		
-		//⑯メッセージの変数に入っている値を表示する 
-		echo "<div id='error'>", $msg, "</div>"; 
 		?>
 		<form action="login.php" method="post" id="log">
 			<p>
@@ -114,3 +116,4 @@ if(isset($_SESSION['error2'])){
 	</div>
 </body>
 </html>
+

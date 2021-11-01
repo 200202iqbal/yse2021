@@ -13,6 +13,17 @@ body{
 	color:#404040;
 }
 
+.home-link{
+	background:#7fffbf;
+	color:#000000;
+	padding:25px;
+	text-decoration: none;	
+}
+.home-link:hover{
+	background-color:#22f18a;
+}
+
+
 #body{
 	width:1400px;
 	margin: auto;
@@ -170,20 +181,21 @@ th button{
 	width:100px;
 }
 
-.sort{
+.sort-link{
 	background:#7fffbf;
+	color:#000000;
     margin-left:0px;
     margin-right:0px;
-    width:30px;
-    height:25px;
-    border:none;
+	padding:5px;
+	text-decoration: none;
+	
 }
 
-.sort:hover
+.sort-link:hover
 {
 	background-color:#22f18a;
-}
 
+}
 #check
 {
     width:50px;
