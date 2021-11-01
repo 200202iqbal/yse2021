@@ -11,7 +11,9 @@
 */
 
 //①セッションを開始する
-session_start();
+if (session_status() == PHP_SESSION_NONE) {
+	session_start();
+}
 
 
 // ②SESSIONの「login」フラグがfalseか判定する。「login」フラグがfalseの場合はif文の中に入る。
@@ -45,22 +47,21 @@ try
 	die($e->getMessage());
 }
 //SQL
-$sql = "SELECT * FROM books LIMIT 10 OFFSET 0";
+$sql = "SELECT * FROM books";
 
 //SQLを実行する
 $statement = $pdo->query($sql);	
 
 function listCount($pdo) {
-    $sql = "SELECT count(id) AS count FROM books";
+    $sql = "SELECT count(id) AS count FROM books;";
     $row = $pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
     return $row['count'];
 }
 
 //Pagination
-function paginate($count,$current_page,$limit = 10,$per_count = 10)
+function paginate($count,$current_page,$limit = 15,$per_count = 10)
 {
 	$page_count = ceil($count/$limit);
-	//echo "$page_count";
 	$page_start = $current_page;
 	$page_end = $page_start + $per_count -1;
 	if($page_end>$page_count)
@@ -71,7 +72,7 @@ function paginate($count,$current_page,$limit = 10,$per_count = 10)
 	if($page_start<0) $page_start = 1;
 
 	$page_prev = ($current_page <=1) ? 1:$current_page -1;
-	$page_next = ($current_page<$page_count) ? $current_page+1 : $page_count;
+	$page_next = ($current_page<$page_count) ? $current_page+1 :$page_count;
 
 	$pages = range($page_start,$page_end);
 
@@ -81,7 +82,7 @@ function paginate($count,$current_page,$limit = 10,$per_count = 10)
 		"page_end",
 		"page_prev",
 		"page_next",
-		"pages",
+		"pages"
 	);
 	return $paginate;
 }
@@ -89,7 +90,7 @@ function paginate($count,$current_page,$limit = 10,$per_count = 10)
 $current_page = (isset($_GET["page"])) ? $_GET["page"] : 1;
 
 $count = listCount($pdo);
-$limit = 10;
+$limit = 15;
 $offset = ($current_page - 1) * $limit;
 
 $paginate = paginate($count,$current_page,$limit,5);
@@ -104,6 +105,7 @@ extract($paginate);
 	<link rel="stylesheet" href="css/ichiran.css" type="text/css" />
 	
 </head>
+
 <body>
 	<div id="header">
 		<h1>書籍一覧</h1>
@@ -152,15 +154,51 @@ extract($paginate);
 							<th id="id">ID</th>
 							<th id="book_name">書籍名</th>
 							<th id="author">著者名</th>
-							<th id="salesDate">発売日</th>
-							<th id="itemPrice">金額</th>
-							<th id="stock">在庫数</th>
+							<th id="salesDate">
+								発売日
+								<button id="sortSalesDate" class="sort" name="sortSales" value="ASC" formaction="sort.php">&#9650;</button>
+								<!-- geometric shape code html &#9650 &#9660  -->
+								<button id="sortSalesDate" class="sort" name="sortSales" value="DESC" formaction="sort.php">&#9660;</button>
+							</th>
+							<th id="itemPrice">
+								金額
+								<button id="sortSalesDate" class="sort" name="sortPrice" value="ASC" formaction="sort.php">&#9650;</button>
+								<!-- geometric shape code html &#9650 &#9660  -->
+								<button id="sortSalesDate" class="sort" name="sortPrice" value="DESC" formaction="sort.php">&#9660;</button>
+							</th>
+							<th id="stock">
+								在庫数
+								<button id="sortSalesDate" class="sort" name="sortStock" value="ASC" formaction="sort.php">&#9650;</button>
+								<!-- geometric shape code html &#9650 &#9660  -->
+								<button id="sortSalesDate" class="sort" name="sortStock" value="DESC" formaction="sort.php">&#9660;</button>
+							</th>
 						</tr>
 					</thead>
 					<tbody>
 						<?php
+						
+						
+						if(isset($_POST["sortSalesDate"]))
+						{
+							
+							$statement = $_POST["sortSalesDate"];
+							$books = $statement->fetch(PDO::FETCH_ASSOC);
+						}
+						if(isset($_POST["sortItemPrice"]))
+						{
+							
+							$statement = $_POST["sortItemPrice"];
+							$books = $statement->fetch(PDO::FETCH_ASSOC);
+						}
+						if(isset($_POST["sortStocks"]))
+						{
+							
+							$statement = $_POST["sortStocks"];
+							$books = $statement->fetch(PDO::FETCH_ASSOC);
+						}
+						
 						//⑩SQLの実行結果の変数から1レコードのデータを取り出す。レコードがない場合はループを終了する。
-						while($books= $statement->fetch(PDO::FETCH_ASSOC)){
+						while($books = $statement->fetch(PDO::FETCH_ASSOC)){
 							//⑪extract変数を使用し、1レコードのデータを渡す。
 							$book = array(
 								"id" => $books["id"],
@@ -191,23 +229,25 @@ extract($paginate);
 	<!-- Paginateコード始まり -->
 	<nav aria-label="Page navigation">
 		<ul class="pagination">
-			<li class="page-item"><a href="?page=1" class="page-link"><<</a></li>
-			<li class="page-item"><a href="?page=<?=$page_prev?>" class="page-link">Prev</a></li>
+				<!-- &laquo; is an HTML character code for a "left-angle quote," otherwise known as the symbol «. -->
+			<li class="page-item"><a href="#" class="page-link">&laquo;</a></li>
+			<li class="page-item"><a href="#" class="page-link">Prev</a></li>
 
 			<?php foreach($pages as $page): ?>
 				<?php if ($current_page == $page):?>
-					<li class="page-item"><a href="?page=<?=$page?>" class="page-link"><?=$page?></a></li>
+					<li class="page-item active"><a href="#" class="page-link"></a></li>
 				<?php else: ?>
-					<li class="page-item"><a href="?page=<?= $page?>" class="page-link"><?=$page?></a></li>
+					<li class="page-item"><a href="#" class="page-link"></a></li>
 				<?php endif ?>
 			<?php endforeach ?>
-			<li class="page-item"><a href="?page=<?=$page_next?>" class="page-link">Next</a></li>
-			<li class="page-item"><a href="?page=<?=$page_count?>" class="page-link">>></a></li>	
+			<li class="page-item"><a href="" class="page-link">Next</a></li>
+			<li class="page-item"><a href="" class="page-link">&raquo;</a></li>	
 		</ul>
 	</nav>
 	<!-- Paginateコード終わり -->
 	<div id="footer">
 		<footer>株式会社アクロイト</footer>
 	</div>
+	<script src="sort.js"></script>
 </body>
 </html>
