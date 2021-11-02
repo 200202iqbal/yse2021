@@ -2,7 +2,8 @@
 if(session_status() == PHP_SESSION_NONE)
 {
     session_start();
-    $_POST = "";
+	unset($_POST["decision"]);
+    
 }
 if(!isset($_SESSION["user"]) || $_SESSION["login"] == false)
 {
@@ -29,6 +30,24 @@ try{
     die($e->getMessage());
 }
 
+// $minPrice = getMinValue($pdo)["minprice"];
+$maxPrice = getMaxValue($pdo)["maxprice"];
+
+function getMinValue($pdo)
+{
+	$sql = "SELECT MIN(price) as minprice FROM books";
+	$statement = $pdo->query($sql);
+	$result = $statement->fetch(PDO::FETCH_ASSOC);
+	return $result;
+}
+
+function getMaxValue($pdo)
+{
+	$sql = "SELECT MAX(price) as maxprice FROM books";
+	$statement = $pdo->query($sql);
+	$result = $statement->fetch(PDO::FETCH_ASSOC);
+	return $result;
+}
 
 ?>
 <!DOCTYPE html>
@@ -54,36 +73,63 @@ try{
 	</div>
 	<!-- メニュー終わり -->
 
-	<form action="add.php" method="post"> 
+	<form action="product_search.php" method="post"> 
 		<div id="pagebody">
 			<!-- エラーメッセージ -->
 			<div id="error">
-			<?php				
+			<?php		
+				var_dump($_POST)
 			?>
 			</div>
 			<!-- エラーメッセージ終わり -->
-
-			<!-- 一覧セクション -->
+			
+			<!-- フォームセクション -->
 			<div id="center">
 				<table>
 					<thead>
 						<tr>
-							<th id="title">キーワード</th>
-							<th id="release">発売年代</th>
-							<th id="itemPrice">金額</th>
-							<th id="stock">在庫数</th>
+							<th>キーワード</th>
+							<th>発売年代</th>
+							<th>金額</th>
+							<th>在庫数</th>
 						</tr>
 					</thead>
 					<tr>
-						<td><input type='text' name='title' size='5' maxlength='11' required></td>
-						<td><input type='text' name='author' size='5' maxlength='11' required></td>
-						<td><input type='text' name='itemPrice' size='5' maxlength='11' required></td>
-						<td><input type='text' name='stock' size='5' maxlength='11' required></td>
+						<td><input type='text' name='title' size='20' maxlength='20'></td>
+						<td>
+							<select id="releaseSearch"  name="release">
+								<option value="NULL"></option>
+								<?foreach (range(1970,date("Y") - 1,10) as $year):?>
+								<option value="<?=$year?>"><?= $year?>年代</option>
+								<?endforeach ?>
+							</select>
+						<td>
+							<select id="itemPriceSearch" name="itemPrice">
+								<?php
+									$range1 = range(400,900,100);
+									$range2 = range(1000,$maxPrice,1000);
+									$rangePrice = array_merge($range1,$range2);
+								?>
+								<option value="NULL"></option>
+								<?php foreach ($rangePrice as $price):?>
+								<option value="<?=$price?>"><?=$price?>円代</option>;		
+								<?endforeach?>
+							</select>
+						</td>
+						<td>
+							<select id="stockSearch" name="stock">
+								<option value="NULL"></option>
+								<?foreach (range(10,40,10) as $stock):?>
+								<option value="<?=$stock?>"><?= $stock?>未満</option>
+								<?endforeach ?>
+								<option value="50">50以上</option>
+							</select>
+						</td>
 					</tr>
 				</table>
 				<button type="submit" id="kakutei" formmethod="POST" name="decision" value="1">確定</button>
 			</div>
-			<!-- 一覧セクション終わり -->
+			<!-- フォームセクション終わり -->
 		</div>
 	</form>
 	<!-- フッター -->

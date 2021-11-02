@@ -212,6 +212,14 @@ table tr:nth-child(2n+0){
 tr #tuika{
 	height:55
 }
+th#titleSearch
+{
+	width:400px;
+}
+select#releaseSearch,#itemPriceSearch,#stockSearch
+{
+	width: 150px;
+}
 
 #left{
 	float:left;
