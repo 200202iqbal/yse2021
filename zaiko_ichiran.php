@@ -202,7 +202,6 @@ if(isset($_GET["sortStock"]))
 					<button type="button" id="logout" onclick="location.href='logout.php'">ログアウト</button>
 				</p>
 				<button type="submit" id="btn1" formmethod="POST" name="decision" value="3" formaction="nyuka.php">入荷</button>
-
 				<button type="submit" id="btn1" formmethod="POST" name="decision" value="4" formaction="syukka.php">出荷</button>
 				<button type="submit" id="btn1" formmethod="POST" name="decision" value="5" formaction="new_product.php">新商品追加</button>
 				<button type="submit" id="btn1" formmethod="POST" name="decision" value="6" formaction="delete_product.php">商品削除</button>
@@ -282,7 +281,7 @@ if(isset($_GET["sortStock"]))
 
 			<?php foreach($pages as $page): ?>
 				<?php if ($current_page == $page):?>
-					<li><a href="?p=<?=$page.@$pageOrder?>"><?=$page?></a></li>
+					<li><a  id="currentPage" ><?=$page?></a></li>
 				<?php else: ?>
 					<li><a href="?p=<?=$page.@$pageOrder?>"><?=$page?></a></li>
 				<?php endif ?>

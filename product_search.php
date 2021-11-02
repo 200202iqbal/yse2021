@@ -73,7 +73,7 @@ function getMaxValue($pdo)
 	</div>
 	<!-- メニュー終わり -->
 
-	<form action="product_search.php" method="post"> 
+	<form action="search_result.php" method="post"> 
 		<div id="pagebody">
 			<!-- エラーメッセージ -->
 			<div id="error">

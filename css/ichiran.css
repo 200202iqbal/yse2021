@@ -355,6 +355,21 @@ select#releaseSearch,#itemPriceSearch,#stockSearch
 	outline: none;
 }
 
+#buttonContainer
+{
+	display:block;
+	
+	width:1200px;
+
+}
+#buttonContainer button
+{
+	display:block;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+
 #kakutei{
 	width: 200px;
 	height: 54px;
@@ -502,4 +517,8 @@ select#releaseSearch,#itemPriceSearch,#stockSearch
 	text-align: center;
 	padding-top:10px;
 	padding-bottom: 10px;
+}
+ul.pagination li a#currentPage
+{
+	background-color: #94f5e1;
 }
