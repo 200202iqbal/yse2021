@@ -33,13 +33,13 @@ try{
 // $minPrice = getMinValue($pdo)["minprice"];
 $maxPrice = getMaxValue($pdo)["maxprice"];
 
-function getMinValue($pdo)
-{
-	$sql = "SELECT MIN(price) as minprice FROM books";
-	$statement = $pdo->query($sql);
-	$result = $statement->fetch(PDO::FETCH_ASSOC);
-	return $result;
-}
+// function getMinValue($pdo)
+// {
+// 	$sql = "SELECT MIN(price) as minprice FROM books";
+// 	$statement = $pdo->query($sql);
+// 	$result = $statement->fetch(PDO::FETCH_ASSOC);
+// 	return $result;
+// }
 
 function getMaxValue($pdo)
 {
@@ -78,7 +78,7 @@ function getMaxValue($pdo)
 			<!-- エラーメッセージ -->
 			<div id="error">
 			<?php		
-				var_dump($_POST)
+				
 			?>
 			</div>
 			<!-- エラーメッセージ終わり -->
@@ -95,10 +95,10 @@ function getMaxValue($pdo)
 						</tr>
 					</thead>
 					<tr>
-						<td><input type='text' name='title' size='20' maxlength='20'></td>
+						<td><input type='text' name='title' size='20' maxlength='20' placeholder="<- キーワードを入力 ->"></td>
 						<td>
 							<select id="releaseSearch"  name="release">
-								<option value="NULL"></option>
+								<option value=""><- 発売年代を入力 -></option>
 								<?foreach (range(1970,date("Y") - 1,10) as $year):?>
 								<option value="<?=$year?>"><?= $year?>年代</option>
 								<?endforeach ?>
@@ -110,7 +110,7 @@ function getMaxValue($pdo)
 									$range2 = range(1000,$maxPrice,1000);
 									$rangePrice = array_merge($range1,$range2);
 								?>
-								<option value="NULL"></option>
+								<option value=""><- 金額を選択 -></option>
 								<?php foreach ($rangePrice as $price):?>
 								<option value="<?=$price?>"><?=$price?>円代</option>;		
 								<?endforeach?>
@@ -118,11 +118,11 @@ function getMaxValue($pdo)
 						</td>
 						<td>
 							<select id="stockSearch" name="stock">
-								<option value="NULL"></option>
+								<option value=""><- 在庫数 -></option>
 								<?foreach (range(10,40,10) as $stock):?>
-								<option value="<?=$stock?>"><?= $stock?>未満</option>
+								<option value="<?=$stock?>"><?= $stock?>冊未満</option>
 								<?endforeach ?>
-								<option value="50">50以上</option>
+								<option value="50">50冊以上</option>
 							</select>
 						</td>
 					</tr>
