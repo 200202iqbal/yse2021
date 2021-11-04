@@ -53,7 +53,7 @@ function getMaxValue($pdo)
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="UTF-8">
 	<title>商品検索</title>
 	<link rel="stylesheet" href="css/ichiran.css" type="text/css" />
 </head>
@@ -103,9 +103,9 @@ function getMaxValue($pdo)
 						<td>
 							<select id="releaseSearch"  name="release">
 								<option value=""><- 発売年代を入力 -></option>
-								<?foreach (range(1970,date("Y") - 1,10) as $year):?>
+								<?php foreach (range(1970,date("Y") - 1,10) as $year):?>
 								<option value="<?=$year?>"><?= $year?>年代</option>
-								<?endforeach ?>
+								<?php endforeach ?>
 							</select>
 						<td>
 							<select id="itemPriceSearch" name="itemPrice">
@@ -116,16 +116,16 @@ function getMaxValue($pdo)
 								?>
 								<option value=""><- 金額を選択 -></option>
 								<?php foreach ($rangePrice as $price):?>
-								<option value="<?=$price?>"><?=$price?>円代</option>;		
-								<?endforeach?>
+								<option value="<?=$price?>"><?=$price?>円代</option>		
+								<?php endforeach?>
 							</select>
 						</td>
 						<td>
 							<select id="stockSearch" name="stock">
 								<option value=""><- 在庫数 -></option>
-								<?foreach (range(10,40,10) as $stock):?>
+								<?php foreach (range(10,40,10) as $stock):?>
 								<option value="<?=$stock?>"><?= $stock?>冊未満</option>
-								<?endforeach ?>
+								<?php endforeach ?>
 								<option value="50">50冊以上</option>
 							</select>
 						</td>
