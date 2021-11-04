@@ -137,9 +137,9 @@ if(isset($_POST))
 						</tr>
 					</thead>
 					<?php if ($books):?>
-						<?foreach ($books as $book):?>
+						<?php foreach ($books as $book):?>
 						<tr id='book'>
-							<td id='check'><input type='checkbox' name='books[]' value=".$books["id"]."></td>
+							<td id='check'><input type='checkbox' name='books[]' value="<?= $book["id"] ?>"></td>
 							<td id='id'><?=$book["id"]?></td>
 							<td id='title'><?=$book["title"]?></td>
 							<td id='author'><?=$book["author"]?></td>
@@ -148,8 +148,8 @@ if(isset($_POST))
 							<td id='stock'><?=$book["stock"]?></td>
 						
 						</tr>
-						<?endforeach?>
-					<?endif?>
+						<?php endforeach?>
+					<?php endif?>
 				</table>
                 <div id="buttonContainer">
                     
