@@ -28,10 +28,19 @@ try
     	die($e->getMessage());
 	}
 
-$title = $_POST["title"];
-$release = $_POST["release"];
-$price = $_POST["itemPrice"];
-$stock = $_POST["stock"];
+if($_SERVER["REQUEST_METHOD"] == "POST")
+{
+	$title = $_POST["title"];
+	$release = $_POST["release"];
+	$price = $_POST["itemPrice"];
+	$stock = $_POST["stock"];
+}else
+{
+	$_SESSION["success"] = "商品検索を入力してください";
+	header("Location: product_search.php");
+	exit;
+}
+
 // var_dump(empty($price));
 
 
@@ -65,7 +74,7 @@ function searchData($pdo,$title,$release,$price,$stock)
 
 	}
 	
-
+	$sql .= " WHERE title LIKE '%{$title}%' AND salesDate BETWEEN {$release} AND {$rangeRelease}";
 	$rows = [];
 	$statements = $pdo->query($sql);
 	while ($row = $statements->fetch(PDO::FETCH_ASSOC))
