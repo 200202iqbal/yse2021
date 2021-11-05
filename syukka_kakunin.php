@@ -114,7 +114,7 @@ foreach($ids as $id){
 	//⑱ ⑰の値が0未満か判定する。0未満の場合はif文の中に入る。
 	if($total_stock<0){
 		//⑲SESSIONの「error」に「出荷する個数が在庫数を超えています」と設定する。
-		$_SESSION["error"]="最大在庫数を超える入力は出来ません";
+		$_SESSION["error"]="出荷する個数が在庫数を超えています";
 		//⑳「include」を使用して「syukka.php」を呼び出す。
 		include("syukka.php");
 		//㉑「exit」関数で処理を終了する。
