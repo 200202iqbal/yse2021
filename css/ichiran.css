@@ -88,6 +88,7 @@ li a:hover{
 #center {
 	margin: auto;
 	width:1000px;
+	min-height:500px;
 	margin-left:170px;
 	padding-bottom: 20px;
 	padding-top: 40px;

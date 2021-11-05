@@ -78,7 +78,11 @@ function getMaxValue($pdo)
 			<!-- エラーメッセージ -->
 			<div id="error">
 			<?php		
-				
+				if(isset($_SESSION["success"]))
+				{
+					echo "<p>".@$_SESSION["success"]."</p>";
+					unset($_SESSION["success"]);
+				}
 			?>
 			</div>
 			<!-- エラーメッセージ終わり -->
