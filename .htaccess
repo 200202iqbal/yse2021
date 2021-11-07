@@ -1,0 +1,8 @@
+#Rewrite URL's
+RewriteEngine On
+RewriteRule ^error/?$ errors/error.html [NC]
+
+# Enable Error Documents
+# (404,File Not Found) | (403,Forbidden) | (505,Internal Server Error)
+ErrorDocument 404 /yse2021/error/error.html
+ErrorDocument 403 /yse2021/error/error.html

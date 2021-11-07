@@ -48,7 +48,6 @@ function getMaxValue($pdo)
 	$result = $statement->fetch(PDO::FETCH_ASSOC);
 	return $result;
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -99,7 +98,7 @@ function getMaxValue($pdo)
 						</tr>
 					</thead>
 					<tr>
-						<td><input type='text' name='title' size='20' maxlength='20' placeholder="<- キーワードを入力 ->"></td>
+						<td><input type='text' name='keyword' size='20' maxlength='20' placeholder="<- キーワードを入力 ->"></td>
 						<td>
 							<select id="releaseSearch"  name="release">
 								<option value=""><- 発売年代を入力 -></option>
@@ -131,7 +130,7 @@ function getMaxValue($pdo)
 						</td>
 					</tr>
 				</table>
-				<button type="submit" id="kakutei" formmethod="POST" name="decision" value="1">確定</button>
+				<button type="submit" id="kakutei" formmethod="POST" name="decision" value="fromProductSearch">確定</button>
 			</div>
 			<!-- フォームセクション終わり -->
 		</div>

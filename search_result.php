@@ -28,59 +28,213 @@ try
     	die($e->getMessage());
 	}
 
-if($_SERVER["REQUEST_METHOD"] == "POST")
+if($_POST["decision"] == "fromProductSearch" && !empty($_POST["keyword"]) || !empty($_POST["release"]) || !empty($_POST["itemPrice"] )|| !empty($_POST["stock"]))
 {
-	$title = $_POST["title"];
+	$keyword = $_POST["keyword"];
 	$release = $_POST["release"];
 	$price = $_POST["itemPrice"];
 	$stock = $_POST["stock"];
-}else
+	
+	$books = searchData($pdo,$keyword,$release,$price,$stock);
+	
+}
+else
 {
 	$_SESSION["success"] = "商品検索を入力してください";
 	header("Location: product_search.php");
 	exit;
 }
 
-// var_dump(empty($price));
-
-
-function searchData($pdo,$title,$release,$price,$stock)
+function searchData($pdo,$keyword,$release,$price,$stock)
 {
 	
 	$rangeRelease = strval((int)($release)+9);
 	$rangePrice = rangePrice($price);
-	// var_dump($price.PHP_EOL.$rangePrice);
-
-	// var_dump($rangeRelease);
-	// var_dump($release);
 
 	$sql = "SELECT * FROM books";
-	if(!empty($title)) $sql .= " WHERE title LIKE '%{$title}%'";
-	if(!empty($release)) $sql .= " WHERE salesDate BETWEEN {$release} AND {$rangeRelease}";
-	if(!empty($price)) $sql .= " WHERE price BETWEEN {$price} AND {$rangePrice}";
-	if(!empty($stock))
+
+	// 0000
+	if(empty($keyword) && empty($release) && empty($price) && empty($stock))
 	{
-		$rangeStock = (int)$stock;
-		// var_dump($stock.PHP_EOL.$rangeStock);
+		$_SESSION["success"] = "商品検索を入力してください";
+		header("Location: product_search.php");
+		exit;
+	}
+
+	//1000
+	if(!empty($keyword) && empty($release) && empty($price) && empty($stock)) $sql .= " WHERE title LIKE '%{$keyword}%' OR author LIKE '%{$keyword}%'";
+
+	//0100
+	if(empty($keyword) && !empty($release) && empty($price) && empty($stock)) $sql .= " WHERE salesDate BETWEEN {$release} AND {$rangeRelease}";
+
+	//1100
+	if(!empty($keyword) && !empty($release) && empty($price) && empty($stock)) $sql .= " WHERE title LIKE '%{$keyword}%' OR author LIKE '%{$keyword}%' AND salesDate BETWEEN {$release} AND {$rangeRelease}";
+
+	//0010
+	if(empty($keyword) && empty($release) && !empty($price) && empty($stock)) $sql .= " WHERE price BETWEEN {$price} AND {$rangePrice}";
+
+	//1010
+	if(!empty($keyword) && empty($release) && !empty($price) && empty($stock)) $sql .= " WHERE title LIKE '%{$keyword}%' OR author LIKE '%{$keyword}%' AND price BETWEEN {$price} AND {$rangePrice}";
+
+	//0110
+	if(empty($keyword) && !empty($release) && !empty($price) && empty($stock)) $sql .= " WHERE salesDate BETWEEN {$release} AND {$rangeRelease} AND price BETWEEN {$price} AND {$rangePrice}";	
+
+	//1110
+	if(!empty($keyword) && !empty($release) && !empty($price) && empty($stock)) $sql .= " WHERE title LIKE '%{$keyword}%' OR author LIKE '%{$keyword}%' AND salesDate BETWEEN {$release} AND {$rangeRelease} AND price BETWEEN {$price} AND {$rangePrice}";
+	
+	//0001
+	if(empty($keyword) && empty($release) && empty($price) && !empty($stock))
+	{
+		$stockB = (int)$stock;
+		$stockA = $stockB;
+
 		if($stock < 50) 
 		{
-			$rangeStock += 9;
-			$sql .= " WHERE stock BETWEEN {$stock} AND {$rangeStock}";
+			$stockA -= 10;
+			$stockB -= 1;
+			
+			$sql .= " WHERE stock BETWEEN {$stockA} AND {$stockB}";
 		}
 		if($stock>=50)
 		{
 			$sql .= " WHERE stock >= {$stock}";
 		}
+	}
 
+	//1001
+	if(!empty($keyword) && empty($release) && empty($price) && !empty($stock))
+	{
+		$stockB = (int)$stock;
+		$stockA = $stockB;
+		
+		if($stock < 50)
+		{
+			$stockA -= 10;
+			$stockB -= 1;
+			$sql .= " WHERE title LIKE '%{$keyword}%' OR author LIKE '%{$keyword}%' AND stock BETWEEN {$stockA} AND {$stockB}";
+		}
+		if($stock >= 50)
+		{
+			$sql .= " WHERE title LIKE '%{$keyword}%' OR author LIKE '%{$keyword}%' AND stock >= {$stock}";
+		}
+	}
+
+	//0101
+	if(empty($keyword) && !empty($release) && empty($price) && !empty($stock))
+	{
+		$stockB = (int)$stock;
+		$stockA = $stockB;
+
+		if($stock < 50) 
+		{
+			$stockA -= 10;
+			$stockB -= 1;
+			
+			$sql .= " WHERE salesDate BETWEEN {$release} AND {$rangeRelease} AND stock BETWEEN {$stockA} AND {$stockB}";
+		}
+		if($stock>=50)
+		{
+			$sql .= " WHERE salesDate BETWEEN {$release} AND {$rangeRelease} AND stock >= {$stock}";
+		}
+	}
+
+	//1101
+	if(!empty($keyword) && !empty($release) && empty($price) && !empty($stock))
+	{	
+		$stockB = (int)$stock;
+		$stockA = $stockB;
+		
+		if($stock < 50)
+		{
+			$stockA -= 10;
+			$stockB -= 1;
+			$sql .= " WHERE title LIKE '%{$keyword}%' OR author LIKE '%{$keyword}%' AND salesDate BETWEEN {$release} AND {$rangeRelease} AND stock BETWEEN {$stockA} AND {$stockB}";
+		}
+		if($stock >= 50)
+		{
+			$sql .= " WHERE title LIKE '%{$keyword}%' OR author LIKE '%{$keyword}%' AND salesDate BETWEEN {$release} AND {$rangeRelease} AND stock >= {$stock}";
+		}
+	}
+
+	//0011
+	if(empty($keyword) && empty($release) && !empty($price) && !empty($stock))
+	{
+		$stockB = (int)$stock;
+		$stockA = $stockB;
+		
+		if($stock < 50)
+		{
+			$stockA -= 10;
+			$stockB -= 1;
+			$sql .= " WHERE price BETWEEN {$price} AND {$rangePrice} AND stock BETWEEN {$stockA} AND {$stockB}";
+		}
+		if($stock >= 50)
+		{
+			$sql .= " WHERE price BETWEEN {$price} AND {$rangePrice} AND stock >= {$stock}";
+		}
+	}
+
+	//1011
+	if(!empty($keyword) && empty($release) && !empty($price) && !empty($stock))
+	{
+		$stockB = (int)$stock;
+		$stockA = $stockB;
+		
+		if($stock < 50)
+		{
+			$stockA -= 10;
+			$stockB -= 1;
+			$sql .= " WHERE title LIKE '%{$keyword}%' OR author LIKE '%{$keyword}%' AND price BETWEEN {$price} AND {$rangePrice} AND stock BETWEEN {$stockA} AND {$stockB}";
+		}
+		if($stock >= 50)
+		{
+			$sql .= " WHERE title LIKE '%{$keyword}%' OR author LIKE '%{$keyword}%' AND price BETWEEN {$price} AND {$rangePrice} AND stock >= {$stock}";
+		}
+	}
+
+	//0111
+	if(empty($keyword) && !empty($release) && !empty($price) && !empty($stock))
+	{	
+		$stockB = (int)$stock;
+		$stockA = $stockB;
+		
+		if($stock < 50)
+		{
+			$stockA -= 10;
+			$stockB -= 1;
+			$sql .= " WHERE salesDate BETWEEN {$release} AND {$rangeRelease} AND price BETWEEN {$price} AND {$rangePrice} AND stock BETWEEN {$stockA} AND {$stockB}";
+		}
+		if($stock >= 50)
+		{
+			$sql .= " WHERE salesDate BETWEEN {$release} AND {$rangeRelease} AND price BETWEEN {$price} AND {$rangePrice} AND stock >= {$stock}";
+		}
+	}
+
+	//1111
+	if(!empty($keyword) && !empty($release) && !empty($price) && !empty($stock))
+	{	
+		$stockB = (int)$stock;
+		$stockA = $stockB;
+		
+		if($stock < 50)
+		{
+			$stockA -= 10;
+			$stockB -= 1;
+			$sql .= " WHERE title LIKE '%{$keyword}%' OR author LIKE '%{$keyword}%' AND salesDate BETWEEN {$release} AND {$rangeRelease} AND price BETWEEN {$price} AND {$rangePrice} AND stock BETWEEN {$stockA} AND {$stockB}";
+		}
+		if($stock >= 50)
+		{
+			$sql .= " WHERE title LIKE '%{$keyword}%' OR author LIKE '%{$keyword}%' AND salesDate BETWEEN {$release} AND {$rangeRelease} AND price BETWEEN {$price} AND {$rangePrice} AND stock >= {$stock}";
+		}
 	}
 	
-	$sql .= " WHERE title LIKE '%{$title}%' AND salesDate BETWEEN {$release} AND {$rangeRelease}";
 	$rows = [];
 	$statements = $pdo->query($sql);
 	while ($row = $statements->fetch(PDO::FETCH_ASSOC))
 	{
 		$rows[] = $row;
 	}
+
 	return $rows;
 }
 function rangePrice($price)
@@ -90,11 +244,17 @@ function rangePrice($price)
 	return $rangePrice;
 }
 
-if(isset($_POST))
+$countResult = countSizeoResult($books);
+
+function countSizeoResult($books)
 {
-	$books = searchData($pdo,$title,$release,$price,$stock);
-	// var_dump($books);
+	return sizeof($books);
 }
+// if(isset($_POST))
+// {
+// 	$books = searchData($pdo,$keyword,$release,$price,$stock);
+// }
+
 
 ?>
 
@@ -126,14 +286,15 @@ if(isset($_POST))
 			<!-- エラーメッセージ -->
 			<div id="error">
 			<?php		
-				// var_dump($books)
+			 echo @$_SESSION["success"];	
+			 echo "結果　：".$countResult."書籍"; 
 			?>
 			</div>
 			<!-- エラーメッセージ終わり -->
 			
 			<!-- フォームセクション -->
 			<div id="center">
-				<table>
+			<table>
 					<thead>
 						<tr>
                             <th id="check"></th>
@@ -148,7 +309,7 @@ if(isset($_POST))
 					<?php if ($books):?>
 						<?php foreach ($books as $book):?>
 						<tr id='book'>
-							<td id='check'><input type='checkbox' name='books[]' value="<?= $book["id"] ?>"></td>
+							<td id='check'><input type='checkbox' name='books[]' value="<?= $book["id"]?>"></td>
 							<td id='id'><?=$book["id"]?></td>
 							<td id='title'><?=$book["title"]?></td>
 							<td id='author'><?=$book["author"]?></td>
@@ -162,8 +323,8 @@ if(isset($_POST))
 				</table>
                 <div id="buttonContainer">
                     
-                <button type="submit" id="kakutei2" formmethod="POST" name="decision" formaction="#" value="1">入荷</button>
-                <button type="submit" id="kakutei2" formmethod="POST" name="decision" formaction="#" value="2">出荷</button>
+                <button type="submit" id="kakutei2" formmethod="POST" name="decision" formaction="nyuka.php" value="1">入荷</button>
+                <button type="submit" id="kakutei2" formmethod="POST" name="decision" formaction="syukka.php" value="2">出荷</button>
                 </div>
 				
 			</div>
