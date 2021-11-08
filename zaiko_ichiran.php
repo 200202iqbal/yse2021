@@ -95,7 +95,7 @@ extract($paginate);
 
 
 //SQL
-$sql = "SELECT * FROM books LIMIT {$limit} OFFSET {$offset}";
+$sql = "SELECT * FROM books WHERE deleteFlag = 0 LIMIT {$limit} OFFSET {$offset}";
 //SQLを実行する
 $statement = $pdo->query($sql);	
 

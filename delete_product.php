@@ -52,9 +52,9 @@ function getId($id,$con)
 // eraseById関数
 function eraseById($id,$con)
 {
-    $_SESSION["lastId"] = $id;
+    // $_SESSION["lastId"] = $id;
     $id = htmlspecialchars($id);
-    $sql = "DELETE FROM books WHERE :id = id";
+    $sql = "UPDATE books SET deleteFlag = 1 WHERE :id = id";
     $statement = $con->prepare($sql);
     return $statement->execute([":id" => $id]);
 }
@@ -62,7 +62,7 @@ function eraseById($id,$con)
 if(isset($_POST["delete"]) && $_POST["delete"] == "ok")
 {
     $ids = $_POST["books"];
-    var_dump($_SESSION["books"]);
+   
     foreach($ids as $id)
     {
         eraseById($id,$pdo);
