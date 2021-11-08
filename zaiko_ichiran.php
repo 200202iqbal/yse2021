@@ -172,7 +172,7 @@ if(isset($_GET["sortStock"]))
 
 <body>
 	<div id="header">
-		<h1><a class="home-link" href="zaiko_ichiran.php">書籍一覧</a></h1>
+		<h1><a class="home-link" title="在庫一覧ページへ移動" href="zaiko_ichiran.php">書籍一覧</a></h1>
 	</div>
 	<form action="zaiko_ichiran.php" method="post" id="myform" name="myform">
 		<div id="pagebody">

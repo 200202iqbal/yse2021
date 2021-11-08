@@ -314,7 +314,7 @@ function countSizeoResult($books)
 							<td id='title'><?=$book["title"]?></td>
 							<td id='author'><?=$book["author"]?></td>
 							<td id='date'><?=$book["salesDate"]?></td>
-							<td id='price'><?=$book["price"]?>"</td>
+							<td id='price'><?=$book["price"]?></td>
 							<td id='stock'><?=$book["stock"]?></td>
 						
 						</tr>
