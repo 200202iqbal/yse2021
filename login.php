@@ -35,7 +35,7 @@ if (isset($_POST['decision']) && $_POST['decision'] == 1) {
 	
 	
 }else{
-	$error_message[1] = "名前が未入力です。";
+	$error_message[1] = "名前かパスワードが未入力です。";
 }}
 
 	
@@ -57,7 +57,7 @@ if (isset($_POST['decision']) && $_POST['decision'] == 1) {
 		header("Location: zaiko_ichiran.php");
 	}
 	else{
-		$error_message[2] = "ユーザー名かパスワードがまちがっています。";
+		$error_message[2] = "IDまたはパスワードが異なっています。";
 	}
 }
 // 	//⑧名前に「yse」、パスワードに「2021」と設定されているか確認する。設定されていた場合はif文の中に入る
