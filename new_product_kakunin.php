@@ -135,6 +135,7 @@ var_dump($_POST);
 						</tr>
 					</tbody>
 				</table>
+				<input type="hidden" name="" value="<?php echo $data["id"]; ?>">
 				<div id="kakunin">
 					<p>
 						上記の書籍を登録します。<br>
