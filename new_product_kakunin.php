@@ -1,4 +1,4 @@
-<?
+<?php
 if(session_status() == PHP_SESSION_NONE)
 {
     session_start();
@@ -8,6 +8,43 @@ if(!isset($_SESSION["user"]) || $_SESSION["login"] == false)
     $_SESSION["error2"] = "ログインしてください";
     header("Location: login.php");
     exit;
+}
+if($_SERVER["REQUEST_METHOD"] = "POST" && $_POST["decision"] == 1)
+{
+    $data = check($_POST);
+    $errors = validate($data);
+    	if(!empty($errors))
+    	{
+        $_SESSION["errors"] = $errors;
+        header("Location: new_product.php");
+        exit;
+   		}
+}
+
+function check($data)
+{
+    if(empty($data)) return;
+    foreach ($data as $posts => $post)
+    {
+        $data[$posts] = htmlspecialchars($post, ENT_QUOTES);
+    }
+    return $data;
+}
+
+function validate($data)
+{
+    $errors = [];
+    if(!is_numeric($data["itemPrice"])) $errors["itemPrice"] = "金額(円) : 数値以外が入力されています";
+    if((int)$data["itemPrice"] < 0) $errors["itemPrice"] = "金額(円) : 0以上入力してください。";
+    
+    if(!is_numeric($data["stock"])) $errors["stock"] = "在庫数 : 数値以外が入力されています";
+    if((int)$data["stock"]<0)$errors["stock"] = "在庫数 : 0以上入力してください。";
+    
+    if(!is_numeric($data["in"])) $errors["in"] = "入荷数 : 数値以外が入力されています";
+    if((int)$data["in"]<0)$errors["in"] = "入荷数 : 0以上入力してください。";
+    
+    if(!is_numeric($data["isbn"])) $errors["isbn"] = "isbn : 数値以外が入力されています";
+    return $errors;
 }
 //データベースへ接続し、接続情報を変数に保存する
 $dbname = "zaiko2021_yse";
@@ -27,7 +64,38 @@ try{
     die($e->getMessage());
 }
 
+function insert($pdo,$data)
+{
+    //isbn番号を自動で作る
+    // $today = date("ymd");
+    // $data["isbn"] = "9784253".$today;
+    // $data["stock"] += $data["in"];
 
+    $sql = "INSERT INTO books (title,author,salesDate,isbn,price,stock,deleteFlag)
+            VALUES (:title,:author,:salesDate,:isbn,:price,:stock)";
+    $statement = $pdo->prepare($sql);
+    $item = $statement->execute([
+        ":title" => $data["title"],
+        ":author" => $data["author"],
+        ":salesDate" => $data["salesDate"],
+        ":isbn" => $data["isbn"],
+        ":price" => $data["itemPrice"],
+        ":stock" => $data["stock"],
+		":deleteFlag" => 0
+    ]);
+    return $item;
+}
+
+if($_SERVER["REQUEST_METHOD"] = "POST"&& isset($_POST["tsuika"]) == "ok")
+{
+	if(insert($pdo,$data))
+	{
+		$_SESSION["success"] ="新商品追加が完了しました";
+		header("Location: zaiko_ichiran.php");
+		exit;
+	}	
+}
+var_dump($_POST);
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -40,7 +108,7 @@ try{
 	<div id="header">
 		<h1>新商品追加確認</h1>
 	</div>
-	<form action="nyuka_kakunin.php" method="post" id="test">
+	<form action="new_product_kakunin.php" formmetho="post">
 		<div id="pagebody">
 			<div id="center">
 				<table>
@@ -53,35 +121,18 @@ try{
 							<th id="isbn">ISBN</th>
 							<th id="itemPrice">金額(円)</th>
 							<th id="stock">在庫数</th>
-							<th id="in">入荷数</th>
 						</tr>
 					</thead>
 					<tbody>
-						<?php
-						//㉜書籍数をカウントするための変数を宣言し、値を0で初期化する。
-						$count = 0;
-						//var_dump($_POST["stock"]);
-						//㉝POSTの「books」から値を取得し、変数に設定する。
-						$ids = $_POST["books"];
-						foreach($ids as $id){
-							//㉞「getByid」関数を呼び出し、変数に戻り値を入れる。その際引数に㉜の処理で取得した値と⑧のDBの接続情報を渡す。
-							$selectedBook = getByid($id,$pdo);
-							
-						?>
 						<tr>
-							
-							<td><?php echo	/* ㉟ ㉞で取得した書籍情報からtitleを表示する。 */$selectedBook["title"];?></td>
-							<td><?php echo	/* ㊱ ㉞で取得した書籍情報からstockを表示する。 */$selectedBook["stock"];?></td>
-							<td><?php echo	/* ㊱ POSTの「stock」に設定されている値を㉜の変数を使用して呼び出す。 */$stock = $_POST["stock"][$count]?></td>
+							<td><?=$data["id"] ?></td>
+							<td><?=$data["title"] ?></td>
+							<td><?=$data["author"] ?></td>
+							<td><?=$data["salesDate"] ?></td>
+							<td><?=$data["isbn"] ?></td>
+							<td><?=$data["itemPrice"] ?></td>
+							<td><?=$data["stock"] ?></td>	
 						</tr>
-						<input type="hidden" name="books[]" value="<?php echo /* ㊲ ㉝で取得した値を設定する */$selectedBook["id"]; ?>">
-						
-						<input type="hidden" name="stock[]" value='<?php echo /* ㊳POSTの「stock」に設定されている値を㉜の変数を使用して設定する。 */$stock;?>'>
-						<?php
-							//㊴ ㉜で宣言した変数をインクリメントで値を1増やす。
-							$count++;
-						}
-						?>
 					</tbody>
 				</table>
 				<div id="kakunin">
@@ -89,7 +140,7 @@ try{
 						上記の書籍を登録します。<br>
 						よろしいですか？
 					</p>
-					<button type="submit" id="message" formmethod="POST" name="add" value="ok">はい</button>
+					<button type="submit" id="message" formmethod="POST" name="tsuika" value="ok">はい</button>
 					<button type="submit" id="message" formaction="new_product.php">いいえ</button>
 				</div>
 			</div>
