@@ -50,7 +50,7 @@ function insert($pdo,$data)
     // $data["isbn"] = "9784253".$today;
     // $data["stock"] += $data["in"];
 
-    $sql = "INSERT INTO books (title,author,salesDate,isbn,price,stock)
+    $sql = "INSERT INTO books (title,author,salesDate,isbn,price,stock,deleteFlag)
             VALUES (:title,:author,:salesDate,:isbn,:price,:stock)";
     $statement = $pdo->prepare($sql);
     $item = $statement->execute([
@@ -60,6 +60,7 @@ function insert($pdo,$data)
         ":isbn" => $data["isbn"],
         ":price" => $data["itemPrice"],
         ":stock" => $data["stock"],
+        ":deleteFlag" => 0
     ]);
     return $item;
 }
