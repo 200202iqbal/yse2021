@@ -21,6 +21,12 @@ if($_SERVER["REQUEST_METHOD"] = "POST" && $_POST["decision"] == 1)
    		}
 }
 
+if(!isset($_POST["decision"]))
+{
+	$_SESSION["errors"] = $errors;
+    header("Location: new_product.php");
+    exit;	
+}
 function check($data)
 {
     if(empty($data)) return;
@@ -86,8 +92,9 @@ function insert($pdo,$data)
     return $item;
 }
 
-if($_SERVER["REQUEST_METHOD"] = "POST"&& isset($_POST["tsuika"]) == "ok")
+if($_SERVER["REQUEST_METHOD"] = "POST"&& $_POST["decision"] == 2)
 {
+	$data = $_POST;
 	if(insert($pdo,$data))
 	{
 		$_SESSION["success"] ="新商品追加が完了しました";
@@ -126,15 +133,6 @@ if($_SERVER["REQUEST_METHOD"] = "POST"&& isset($_POST["tsuika"]) == "ok")
 						<tr>
 
 							<td><?=$data["id"] ?></td>
-							<td><?=$data["title"] ?></td>
-							<td><?=$data["author"] ?></td>
-							<td><?=$data["salesDate"] ?></td>
-							<td><?=$data["isbn"] ?></td>
-							<td><?=$data["itemPrice"] ?></td>
-							<td><?=$data["stock"] ?></td>	
-						</tr>
-						<tr>
-							<td><?=$data["id"] ?></td>
 							<input type="hidden" name="id" value="<?php echo $data["id"]; ?>">
 							<td><?=$data["title"] ?></td>
 							<input type="hidden" name="title" value="<?php echo $data["title"]; ?>">
@@ -147,7 +145,7 @@ if($_SERVER["REQUEST_METHOD"] = "POST"&& isset($_POST["tsuika"]) == "ok")
 							<td><?=$data["itemPrice"] ?></td>
 							<input type="hidden" name="itemPrice" value="<?php echo $data["itemPrice"]; ?>">
 							<td><?=$data["stock"] ?></td>
-							<input type="hidden" name="stock" value="<?php echo $data["stock"]; ?>">	
+							<input type="hidden" name="stock" value="<?php echo $data["stock"]; ?>">
 						</tr>
 					</tbody>
 				</table>
