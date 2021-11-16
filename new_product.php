@@ -70,7 +70,7 @@ function getLastID($pdo)
 	</div>
 	<!-- メニュー終わり -->
 
-	<form action="add.php" method="post"> 
+	<form action="new_product_kakunin.php" method="post"> 
 		<div id="pagebody">
 			<!-- エラーメッセージ -->
 			<div id="error">
@@ -101,7 +101,7 @@ function getLastID($pdo)
 						</tr>
 					</thead>
 					<tr>
-						<td><?php echo $lastId;?></td>
+						<td><input type="hidden" name="id" value="<?php echo $lastId;?>"><?php echo $lastId;?></td>
 						<td><input type='text' name='title' size='5' maxlength='11' required></td>
 						<td><input type='text' name='author' size='5' maxlength='11' required></td>
 						<td><input type='text' name='salesDate' size='5' maxlength='11' required></td>
