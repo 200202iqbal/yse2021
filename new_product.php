@@ -105,7 +105,7 @@ function getLastID($pdo)
 						<td><input type='text' name='title' size='5' maxlength='11' required></td>
 						<td><input type='text' name='author' size='5' maxlength='11' required></td>
 						<td><input type='text' name='salesDate' size='5' maxlength='11' required></td>
-						<td><input type='text' name='isbn' size='13' maxlength='15' required></td>
+						<td><input type='text' name='isbn' size='13' maxlength='13' required></td>
 						<td><input type='text' name='itemPrice' size='5' maxlength='11' required></td>
 						<td><input type='text' name='stock' size='5' maxlength='11' required></td>
 						<td><input type='text' name='in' size='5' maxlength='11' required></td>
